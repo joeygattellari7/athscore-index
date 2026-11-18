@@ -7,7 +7,7 @@ the next run carries on from the cache.
 Run:  python3 build_top5.py   -> top5_players.csv
 Environment: ESPN_DIR=<folder> reads {code}_{year}.json files instead of the network (used for tests).
 """
-import csv, json, os, re, sys, time, collections, unicodedata, urllib.request, urllib.error
+import statistics, csv, json, os, re, sys, time, collections, unicodedata, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 import build_pl_index as B   # reuse the rating engine: score(), components(), team_context(), TEAMTAB and the honour points
 
@@ -25,7 +25,7 @@ FAILED = []
 
 W_E = {"GK": {"cs": .35, "gcg": .35, "sv": .30},
        "DEF": {"defact": .30, "pass": .15, "ga": .15, "cs": .20, "xgc": .20},
-       "MID": {"ga": .30, "kp": .25, "defact": .15, "pass": .15, "sot": .15},
+       "MID": {"ga": .40, "kp": .20, "defact": .10, "pass": .10, "sot": .20},
        "FWD": {"g": .35, "a": .20, "sot": .15, "shots": .10, "kp": .20}}
 # honours that are cheap to hand-enter and unambiguous (season = end year); club names are compared after stripping accents and spaces.
 CL = {2006: "barcelona", 2007: "acmilan", 2009: "barcelona", 2010: "intermilan", 2011: "barcelona", 2013: "bayernmunich", 2014: "realmadrid",
@@ -199,6 +199,7 @@ def build_league(name, code):
         if sr:
             mx = max(r["min"] for r in sr)
             B.score(sr, W_E, min(450, 0.5 * mx))
+            neutral_mix(sr, min(450, 0.5 * mx))
             rows += sr
     if not rows:
         return [], 0
@@ -237,6 +238,21 @@ def build_league(name, code):
     B.components(rows)
     cur_games = max((v["games"] for v in (teams_by_se.get(CURRENT_YEAR + 1) or {}).values()), default=0)
     return rows, cur_games
+
+
+def neutral_mix(sr, pool_min):
+    """Midfielders are rated against other midfielders, whose pool scores few goals, so 12 goals and 10 assists looked elite while a striker
+    with the same return looked average. Blend 35% of a position-neutral goal-involvement score (goals plus 0.7 x assists per 90, z-scored
+    across all outfield players in the season) into Output for midfielders and forwards so goal contributions count the same everywhere."""
+    pool = [r for r in sr if r["pos"] != "GK" and r["min"] >= pool_min]
+    if len(pool) < 10:
+        return
+    val = lambda r: (r["goals"] + 0.7 * r["assists"]) / (max(r["min"], 1) / 90)
+    mu = statistics.mean(val(r) for r in pool); sd = statistics.pstdev([val(r) for r in pool]) or 1
+    for r in sr:
+        if r["pos"] in ("MID", "FWD"):
+            z = max(-2.5, min(3.5, (val(r) - mu) / sd))
+            r["out"] = round(max(0.0, min(100.0, 0.65 * r["out"] + 0.35 * (50 + 16 * z))), 1)
 
 
 def prev_snapshot(code, rnd):
