@@ -1,50 +1,44 @@
 {
- "us_home": {
+ "by_esp_2025": {
   "status": 200,
-  "ctype": "text/html",
-  "len": 26719,
-  "vars": [],
-  "text": " Understat.com We will come back soon "
- },
- "us_epl2024": {
-  "status": 200,
-  "ctype": "text/html",
-  "len": 26719,
-  "vars": [],
-  "text": " Understat.com We will come back soon "
- },
- "us_laliga2024_browser": {
-  "status": 200,
-  "ctype": "text/html",
-  "len": 26719,
-  "vars": [],
-  "text": " Understat.com We will come back soon "
- },
- "espn_byathlete": {
-  "status": 200,
-  "ctype": "application/json;charset=UTF-8",
   "len": 307,
-  "vars": [],
   "text": "{\"currentSeason\":{\"year\":2026,\"displayName\":\"2026-27 Spanish LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"type\":{\"id\":\"1\",\"type\":14357,\"name\":\"2026-27 LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"week\":{}}}}"
  },
- "espn_standings": {
+ "by_esp_2016": {
   "status": 200,
-  "ctype": "application/json;charset=UTF-8",
-  "len": 68646,
-  "vars": [],
-  "text": "{\"uid\":\"s:600~l:740\",\"id\":\"15\",\"name\":\"Spanish LALIGA\",\"abbreviation\":\"LALIGA\",\"children\":[{\"uid\":\"s:600~l:740~g:1\",\"id\":\"1\",\"name\":\"2025-26 LALIGA\",\"abbreviation\":\"2025-2026\",\"standings\":{\"id\":\"0\",\"name\":\"overall\",\"displayName\":\"Standings\",\"links\":[{\"language\":\"en-US\",\"rel\":[\"standings\",\"desktop\"],\"href\":\"https://www.espn.com/soccer/table/_/league/esp.1\",\"text\":\"Full Table\",\"shortText\":\"Standings\",\"isExternal\":false,\"isPremium\":false}],\"season\":2025,\"seasonType\":1,\"seasonDisplayName\":\"2025-26 Spanish LALIGA\",\"entries\":[{\"team\":{\"id\":\"83\",\"uid\":\"s:600~t:83\",\"location\":\"Barcelona\",\"name\":\"Barcelona\",\"abbreviation\":\"BAR\",\"displayName\":\"Barcelona\",\"shortDisplayName\":\"Barcelona\",\"isActive\":true,"
+  "len": 307,
+  "text": "{\"currentSeason\":{\"year\":2026,\"displayName\":\"2026-27 Spanish LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"type\":{\"id\":\"1\",\"type\":14357,\"name\":\"2026-27 LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"week\":{}}}}"
  },
- "espn_core_leaders": {
+ "by_esp_2005": {
   "status": 200,
-  "ctype": "application/json;charset=utf-8",
-  "len": 148993,
-  "vars": [],
-  "text": "{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/types/1/leaders?lang=en&region=us\",\"id\":\"0\",\"name\":\"Total\",\"abbreviation\":\"Total\",\"categories\":[{\"name\":\"goalsLeaders\",\"displayName\":\"Goals\",\"shortDisplayName\":\"Goals\",\"abbreviation\":\"G\",\"leaders\":[{\"displayValue\":\"Matches: 31, Goals: 25\",\"shortDisplayValue\":\"M: 31, G: 25: A: 5\",\"value\":25.0,\"rel\":[\"athlete\"],\"athlete\":{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/231388?lang=en&region=us\"},\"team\":{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/teams/86?lang=en&region=us\"},\"statistics\":{\"$ref\":\"http://sports.core.api.espn.co"
+  "len": 307,
+  "text": "{\"currentSeason\":{\"year\":2026,\"displayName\":\"2026-27 Spanish LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"type\":{\"id\":\"1\",\"type\":14357,\"name\":\"2026-27 LALIGA\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"week\":{}}}}"
  },
- "fbref": {
-  "status": 403
+ "by_ita_2020": {
+  "status": 200,
+  "len": 317,
+  "text": "{\"currentSeason\":{\"year\":2026,\"displayName\":\"2026-27 Italian Serie A\",\"startDate\":\"2026-06-05T04:00:00.000+00:00\",\"endDate\":\"2027-07-01T03:59:00.000+00:00\",\"type\":{\"id\":\"1\",\"type\":14240,\"name\":\"2026-27 Italian Serie A\",\"startDate\":\"2026-06-05T04:00:00.000+00:00\",\"endDate\":\"2027-07-01T03:59:00.000+00:00\",\"week\":{}}}}"
  },
- "fotmob": {
-  "status": 404
+ "by_eng_2020": {
+  "status": 200,
+  "len": 331,
+  "text": "{\"currentSeason\":{\"year\":2026,\"displayName\":\"2026-27 English Premier League\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"type\":{\"id\":\"1\",\"type\":14308,\"name\":\"2026-27 English Premier League\",\"startDate\":\"2026-06-01T04:00:00.000+00:00\",\"endDate\":\"2027-06-01T03:59:00.000+00:00\",\"week\":{}}}}"
+ },
+ "core_ath_stats": {
+  "status": 200,
+  "len": 22833,
+  "text": "{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/types/1/athletes/231388/statistics/0?lang=en&region=us\",\"season\":{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025?lang=en&region=us\"},\"athlete\":{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/231388?lang=en&region=us\"},\"splits\":{\"id\":\"0\",\"name\":\"Total\",\"abbreviation\":\"Total\",\"type\":\"total\",\"categories\":[{\"name\":\"defensive\",\"displayName\":\"Defensive\",\"shortDisplayName\":\"Defensive\",\"abbreviation\":\"def\",\"summary\":\"\",\"stats\":[{\"name\":\"blockedShots\",\"displayName\":\"Shots Blocked\",\"shortDisplayName\":\"SHBLK\",\"description\":\"The number shots blocked by a defender.\",\"abbreviation\":\"SHBLK\",\"value\":36.0,\"displayValue\":\"36\"},{\"name\":\"effectiveClearance\",\"displayName\":\"Effective Clearance\",\"shortDisplayName\":\"EFFCL\",\"description\":\"The number of clearances that stops the attack of the opposing team.\",\"abbreviation\":\"EFFCL\",\"value\":0.0,\"displayValue\":\"0\"},{\"name\":\"effectiveTackles\",\"displayName\":\"Tackles Won\",\"shortDisplayName\":\"TKL\",\"description\":\"The number of tackles where the player wins the ball.\",\"abbreviation\":\"TKL\",\"value\":1.0,\"displayValue\":\"1\"},{\"name\":\"inneffectiveTackles\",\"displayName\":\"Tackles Lost\",\"shortDisplayName\":\"TKLL\",\"description\":\"The number of tackles where the player doesn't win the ball.\",\"abbreviation\":\"TKLL\",\"value\":3.0,\"displayValue\":\"3\"},{\"name\":\"interceptions\",\"displayName\":\"Interceptions\",\"shortDisp"
+ },
+ "core_team_ath": {
+  "status": 200,
+  "len": 668,
+  "text": "{\"count\":33,\"pageIndex\":1,\"pageSize\":5,\"pageCount\":7,\"items\":[{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/131634?lang=en&region=us\"},{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/297362?lang=en&region=us\"},{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/368359?lang=en&region=us\"},{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/403587?lang=en&region=us\"},{\"$ref\":\"http://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/athletes/128714?lang=en&region=us\"}]}"
+ },
+ "stand_2016": {
+  "status": 200,
+  "len": 68588,
+  "text": [
+   "\"seasonDisplayName\":\"2016-17 Spanish LaLiga\""
+  ]
  }
 }
