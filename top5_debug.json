@@ -1,0 +1,47 @@
+{
+ "rsssf_pele": {
+  "status": 200,
+  "len": 5663,
+  "head": " Prolific Scorers Data - Pel\ufffd - Additional Data Prolific Scorers Data - Pel\ufffd - Additional Data Data by Club/Team Official Friendlies Total 1956\ufffd1974 FC Santos 666 - 644 451 - 449 1117 -1093 1957 Combined Santos/Vasco 4 - 6 4 - 6 1957\ufffd1971 Brasil 92 \ufffd 77 92 \ufffd 77 1957-1976 Brasil (other matches) 4 - 2* 45 - 42 49 - 44 1959 Army-teams 4 - 4** 10 - 12 "
+ },
+ "rsssf_index": {
+  "status": 200,
+  "len": 13027,
+  "head": " The RSSSF Players' Archive Data on Players South American Coaches in World Cup Qualifying 1996-2010 Algerian National Team Coaches Argentinian National Team Coaches Australian National Team Coaches Austrian National Team Coaches Belgian National Team Coaches Bolivian National Team Coaches Brazilian National Team Coaches Brazilian National Women Te"
+ },
+ "11v11_pele": {
+  "status": 200,
+  "len": 71318,
+  "head": " Pel\u00e9 Football Player Statistics | 11v11.com #fubovid { background-color: #eeeeee; border: 0px solid red ! important; float: left; margin-bottom: 30px; margin-right: 20px; width: 500px; } #fubovid p { padding: 10px; margin: 0 ! important; } #fubovid div.fubo-footer { margin-top: -10px; padding-right: 10px; text-align: right; } div.playerCard #fubov"
+ },
+ "11v11_robots": {
+  "status": 200,
+  "len": 1680,
+  "head": "User-agent: * # stop google treating fb relative links as ours Disallow: /plugins/feedback.php # tags not available - should they be? remove from sitemap if need be Disallow: /tags/ Disallow: /404.php # old cms stuff Disallow: /subscribers/index.php?pageID=286 # vbulletin stuff there is no need to index Disallow: /forums/admincp/ Disallow: /forums/"
+ },
+ "wikipedia_api": {
+  "status": 200,
+  "len": 1902,
+  "head": "{\"batchcomplete\":\"\",\"query\":{\"normalized\":[{\"from\":\"1963_Santos_FC_season\",\"to\":\"1963 Santos FC season\"}],\"pages\":{\"79979512\":{\"pageid\":79979512,\"ns\":0,\"title\":\"1963 Santos FC season\",\"extract\":\"The 1963 season was Santos Futebol Clube's fiftieth-first in existence and the club's third consecutive season in the top flight of Brazilian football. It "
+ },
+ "wikidata_sparql": {
+  "status": 200,
+  "len": 1779,
+  "head": "{ \"head\" : { \"vars\" : [ \"t\", \"m\", \"g\" ] }, \"results\" : { \"bindings\" : [ { \"t\" : { \"type\" : \"uri\", \"value\" : \"http://www.wikidata.org/entity/Q83459\" }, \"m\" : { \"datatype\" : \"http://www.w3.org/2001/XMLSchema#decimal\", \"type\" : \"literal\", \"value\" : \"92\" }, \"g\" : { \"datatype\" : \"http://www.w3.org/2001/XMLSchema#decimal\", \"type\" : \"literal\", \"value\" : \""
+ },
+ "openfootball_it": {
+  "status": 200,
+  "len": 2362,
+  "head": "# Italy ## What's `football.db`? A free open public domain football database & schema for use in any (programming) language using datasets in the Football.TXT format. More [`football.db` Project Site \u00bb](http://openfootball.github.io) ## Intro Free open public domain football data for Italy / Europe. Events include: | Level | | | | ----: | ---------"
+ },
+ "fjelstul_eng": {
+  "status": 200,
+  "len": 869336,
+  "head": "key_id,season_id,season,tier,division,subdivision,position,team_id,team_name,played,wins,draws,losses,goals_for,goals_against,goal_difference,points,point_adjustment 1,S-1888-1,1888,1,First Division,None,1,T-009,Preston North End,22,18,4,0,74,15,59,40,0 2,S-1888-1,1888,1,First Division,None,2,T-002,Aston Villa,22,12,5,5,61,43,18,29,0 3,S-1888-1,188"
+ },
+ "statsbomb_comps": {
+  "status": 200,
+  "len": 34887,
+  "head": "[ { \"competition_id\" : 9, \"season_id\" : 281, \"country_name\" : \"Germany\", \"competition_name\" : \"1. Bundesliga\", \"competition_gender\" : \"male\", \"competition_youth\" : false, \"competition_international\" : false, \"season_name\" : \"2023/2024\", \"match_updated\" : \"2024-09-28T20:46:38.893391\", \"match_updated_360\" : \"2025-11-15T23:17:41.827093\", \"match_availa"
+ }
+}
