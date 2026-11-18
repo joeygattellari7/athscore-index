@@ -138,8 +138,8 @@ def load_season(code, lg, year):
         p = f"{local}/{code}_{year}.json"
         return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
     cached = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else None
-    if cached is not None and year < CURRENT_YEAR:
-        return cached or None
+    if cached and year < CURRENT_YEAR:
+        return cached          # finished seasons with data are never fetched again; empty ones are retried
     if time.time() - T0 > BUDGET and year < CURRENT_YEAR:
         FAILED.append(f"{lg} {year}: skipped for now (time budget), next run continues")
         return None
@@ -149,8 +149,7 @@ def load_season(code, lg, year):
         FAILED.append(f"{lg} {year}: {e}")
         return cached or None
     if d is None or len(d["players"]) < 150:
-        if year < CURRENT_YEAR:
-            json.dump({}, open(path, "w"))          # ESPN has nothing usable for this season; do not ask again
+        FAILED.append(f"{lg} {year}: " + ("ESPN returned no standings" if d is None else f"only {len(d['players'])} players with minutes") + ", will retry next run")
         return cached or None
     json.dump(d, open(path, "w", encoding="utf-8"), separators=(",", ":"))
     return d
