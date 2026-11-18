@@ -23,9 +23,15 @@ header{padding:28px 20px 8px;max-width:1400px;margin:0 auto}
 h1{font-family:var(--display);font-weight:700;font-size:38px;letter-spacing:.02em;margin:0;text-transform:uppercase;text-wrap:balance}
 h1 span{color:var(--accent)}
 .sub{color:var(--muted);max-width:70ch;margin:6px 0 0}
-main{display:grid;grid-template-columns:350px minmax(0,1fr);gap:16px;max-width:1400px;margin:16px auto 0;padding:0 20px;align-items:start}
-@media (max-width:920px){main{grid-template-columns:1fr}}
-.rail{display:flex;flex-direction:column;gap:16px}
+main{display:block;max-width:1180px;margin:16px auto 0;padding:0 20px}
+header{max-width:1180px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.rail{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:16px;z-index:60;display:flex;flex-direction:column;gap:16px;visibility:hidden;transform:translateX(100%);transition:transform .2s,visibility 0s .2s;box-shadow:-12px 0 32px rgba(0,0,0,.45)}
+body.drawer .rail{visibility:visible;transform:none;transition:transform .2s}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:55;display:none}
+body.drawer .scrim{display:block}
+.railtop{display:flex;justify-content:space-between;align-items:center}
+.railtop b{font-family:var(--display);font-size:22px;letter-spacing:.04em;text-transform:uppercase}
+#btnDrawer{display:inline-flex;gap:8px;align-items:center}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
 h2{font-family:var(--display);font-size:20px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 10px;font-weight:600}
 label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px}
@@ -102,18 +108,63 @@ div.stgrid div{background:var(--panel2);border:1px solid var(--line);border-radi
 div.stgrid b{display:block;font-family:var(--display);font-size:22px;line-height:1.1}
 div.stgrid span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 tr.more td{text-align:center;padding:12px}
+/* player identity: avatar, name, position badge */
+.who{display:flex;align-items:center;gap:12px}
+.av{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,var(--club,#445),#0b0f15);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.03em;color:#fff;border:2px solid rgba(255,255,255,.14);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.av.big{width:112px;height:112px;font-size:44px;border-width:3px}
+.who .name{font-size:16px;line-height:1.2}
+.pos{display:inline-block;min-width:34px;text-align:center;padding:0 6px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.06em;margin-right:6px;color:#0d1117;background:#9fb0c7}
+.pos.GK{background:#f2c14b}.pos.DEF{background:#6ec6ff}.pos.MID{background:#6fe3b0}.pos.FWD{background:#ff8f7a}
+.meta{margin-top:3px;font-size:12.5px;color:var(--muted)}
+/* expanded player card */
+tr.detail td{padding:0;background:transparent}
+.pcard{margin:6px 0 14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#161c26;cursor:default}
+.phead{position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 26px;background:linear-gradient(110deg,color-mix(in srgb,var(--club,#445) 70%,#0b0f15) 0%,#10151d 78%)}
+.phead h3{margin:0;font-family:var(--display);font-size:38px;line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.pmeta{margin-top:8px;font-size:14px;color:#dbe3ee;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.chip{padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12.5px;font-weight:600}
+.pactions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.pbtn{padding:7px 16px;border-radius:999px;font-weight:700;font-size:13.5px;background:var(--accent);color:#1b1500}
+.pbtn.up{background:#3ecf8e;color:#06220f}.pbtn.dn{background:#ff6b6b;color:#2a0707}.pbtn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.35)}
+.pstats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:14px 16px 0;border:1px solid var(--line);border-radius:10px;background:#10151d}
+.pstats div{padding:14px 8px;text-align:center;border-right:1px solid var(--line)}
+.pstats div:last-child{border-right:0}
+.pstats b{display:block;font-family:var(--display);font-size:34px;line-height:1.05}
+.pstats span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pstats .head b{color:var(--accent)}.pstats .form b{color:var(--form)}.pstats .career b{color:var(--career)}
+.tabs{display:flex;gap:4px;margin:16px 16px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:10px 14px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected=true]{color:var(--text);border-bottom-color:var(--text)}
+.tabbody{padding:16px 16px 18px}
+.card2{background:#10151d;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card2 h4{margin:0 0 10px;font-family:var(--display);font-size:16px;letter-spacing:.07em;text-transform:uppercase}
+.sumtxt{font-size:14.5px;line-height:1.55;margin:0}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:150px 1fr 70px;gap:12px;align-items:center;font-size:13.5px}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--line);position:relative;overflow:hidden}
+.bar i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--c,var(--accent));border-radius:5px}
+.bar em{font-style:normal;color:var(--muted);font-size:12px}
+.hon{display:grid;gap:8px}
+.hon div{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.hon b{font-family:var(--display);font-size:18px;min-width:70px}
+@media(max-width:700px){.pstats{grid-template-columns:repeat(2,1fr)}.pstats div:nth-child(2){border-right:0}.pstats div:nth-child(-n+2){border-bottom:1px solid var(--line)}.av.big{width:76px;height:76px;font-size:28px}.phead h3{font-size:28px}.bar{grid-template-columns:100px 1fr 56px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>AthScore <span>Index</span></h1>
-  <p class="sub">Import athlete seasons from any sport, score them on one scale, and rank them. Every score is built from competition rank, recency and sample size, and you can change each setting and watch the ranking move.</p>
+  <div>
+    <h1>AthScore <span>Index</span></h1>
+    <p class="sub">Every Premier League player since 1992, scored on one scale from output, impact, team success, honours and availability. Updated after every round.</p>
+  </div>
+  <button type="button" id="btnDrawer" aria-expanded="false" aria-controls="rail">&#9881; Data &amp; settings</button>
 </header>
+<div class="scrim" id="scrim"></div>
 
 <main>
-  <div class="rail">
+  <div class="rail" id="rail" aria-label="Data and settings">
+    <div class="railtop"><b>Data &amp; settings</b><button type="button" id="btnCloseDrawer">Close</button></div>
     <section class="panel" aria-labelledby="h-import">
-      <h2 id="h-import">1. Import data</h2>
+      <h2 id="h-import">Data</h2>
       <label for="csv">One row per athlete per season. Paste from Sheets or Excel, or upload a CSV.</label>
       <textarea id="csv" rows="9" spellcheck="false" placeholder="athlete,sport,position,competition,tier,season,games,perf,stat,birth_year"></textarea>
       <div class="btns">
@@ -152,7 +203,7 @@ tr.more td{text-align:center;padding:12px}
     </section>
 
     <section class="panel" aria-labelledby="h-set">
-      <h2 id="h-set">2. Scoring settings</h2>
+      <h2 id="h-set">Scoring settings</h2>
       <div class="grid2">
         <div class="field"><label for="curSeason">Current season</label><input id="curSeason" type="number" step="0.1" value="2027"></div>
         <div class="field"><label for="priorGames">Games for 50% trust</label><input id="priorGames" type="number" min="1" value="20"></div>
@@ -173,7 +224,7 @@ tr.more td{text-align:center;padding:12px}
   </div>
 
   <section class="panel" aria-labelledby="h-rank">
-    <h2 id="h-rank">3. Ranking</h2>
+    <h2 id="h-rank" style="font-size:26px">Ranking</h2>
     <div class="views" role="group" aria-label="Ranking view">
       <button type="button" id="vSeason" data-view="season" aria-pressed="true">Current season</button>
       <button type="button" id="vCurrent" data-view="current" aria-pressed="false">Current players</button>
@@ -210,13 +261,13 @@ tr.more td{text-align:center;padding:12px}
       </table>
     </div>
     <p class="small" style="margin:8px 0 0">Select a row to see how each season contributes. Inactive means no season in the last year.</p>
-    <div class="exp">
+    <details class="exp"><summary>Export this ranking</summary>
       <div class="btns" style="margin-top:0">
         <button id="btnCopyRank" type="button">Copy ranking as CSV</button>
         <span class="small" id="copyMsg" aria-live="polite"></span>
       </div>
       <textarea id="exportBox" readonly spellcheck="false" aria-label="Ranking as CSV" style="margin-top:8px"></textarea>
-    </div>
+    </details>
   </section>
 </main>
 
@@ -774,7 +825,7 @@ function renderBoard(){
     pool.forEach(r=>{ const pr=prevRank.get(r.key), nr=rankOf.get(r.key); 
       mv.set(r.key, pr===undefined?{isNew:true}:{d:pr-nr, pr, dh:r.headline-(pp[pr-1].h)}); });
   }
-  state.moves=mv;
+  state.moves=mv; state.rankOf=rankOf; { const c={}, pr=new Map(); pool.forEach(r=>{ c[r.position]=(c[r.position]||0)+1; pr.set(r.key,c[r.position]); }); state.posRank=pr; }
   const list=pool.filter(r=>!q||r.athlete.toLowerCase().includes(q));
   list.forEach(r=>{ r.rankNo=rankOf.get(r.key); });
   state.shown=list;
@@ -791,7 +842,7 @@ function renderBoard(){
     const confCol=r.confLabel==='High'?'var(--form)':(r.confLabel==='Medium'?'var(--accent)':'var(--bad)');
     html+='<tr class="row" data-key="'+esc(r.key)+'" tabindex="0" aria-expanded="'+open+'">'
       +'<td class="rank">'+rankOf.get(r.key)+(()=>{const m=mv.get(r.key); if(!m) return ''; if(m.isNew) return '<small class="mv-new">new</small>'; return m.d>0?'<small class="mv-up">&#9650;'+m.d+'</small>':(m.d<0?'<small class="mv-dn">&#9660;'+(-m.d)+'</small>':'<small class="mv-new">&ndash;</small>');})()+'</td>'
-      +'<td><div class="name">'+esc(r.athlete)+'</div><div class="small">'+esc(r.position)+' · '+esc(r.club||r.competition)+(r.nT?' · '+r.nT+' title'+(r.nT>1?'s':''):'')+(r.nA?' · '+r.nA+' award'+(r.nA>1?'s':''):'')+(r.active?'':' <span class="pill off">Inactive</span>')+'</div></td>'
+      +'<td><div class="who">'+avatar(r,false)+'<div><div class="name">'+esc(r.athlete)+'</div><div class="meta"><span class="pos '+esc(r.position)+'">'+esc(r.position)+'</span>'+esc(r.club||r.competition)+(r.nT?' · '+r.nT+' title'+(r.nT>1?'s':''):'')+(r.nA?' · '+r.nA+' award'+(r.nA>1?'s':''):'')+(r.active?'':' <span class="pill off">Inactive</span>')+'</div></div></div></td>'
       +(state.view==='current'?scoreCell(r.form,'form')+scoreCell(r.career,'career'):'')
       +scoreCell(r.headline,'head')
       +'<td class="conf"><span style="color:'+confCol+'">'+r.confLabel+'</span><i style="--w:'+Math.round(r.confidence*100)+'%;--c:'+confCol+'"></i></td>'
@@ -811,29 +862,74 @@ function renderBoard(){
 }
 
 const SEAS=y=>(y-1)+'-'+String(y).slice(2);
+
+const CLUBS={'arsenal':'#EF0107','aston villa':'#7B003C','bournemouth':'#DA291C','brentford':'#E30613','brighton':'#0057B8','burnley':'#6C1D45','chelsea':'#034694','crystal palace':'#1B458F','everton':'#003399','fulham':'#7a7a7a','leeds':'#1D428A','liverpool':'#C8102E','man city':'#6CABDD','manchester city':'#6CABDD','man utd':'#DA291C','manchester united':'#DA291C','newcastle':'#3b3b3b','nott':'#DD0000','sunderland':'#EB172B','spurs':'#132257','tottenham':'#132257','west ham':'#7A263A','wolves':'#C58E00','wolverhampton':'#C58E00','coventry':'#59B3E6','hull':'#F5A12D','ipswich':'#3A64A3','leicester':'#003090','southampton':'#D71920','middlesbrough':'#E1262C','blackburn':'#0072CE','sheffield':'#EE2737','west brom':'#122F67','watford':'#C9A400','norwich':'#00A650','stoke':'#E03A3E','swansea':'#9a9a9a','cardiff':'#0070B5','huddersfield':'#0E63AD','qpr':'#1D5BA4','queens park':'#1D5BA4','bolton':'#263C7E','wigan':'#1F6FB7','portsmouth':'#001C58','charlton':'#D4021D','derby':'#7a7a7a','reading':'#004494','birmingham':'#0000CC'};
+function clubColor(name){
+  const n=String(name||'').toLowerCase();
+  for(const k in CLUBS){ if(n.indexOf(k)>=0) return CLUBS[k]; }
+  let h=0; for(let i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))%360; return 'hsl('+h+',45%,38%)';
+}
+function initials(name){
+  const t=String(name||'').replace(/\(.*?\)/g,'').trim().split(/\s+/).filter(Boolean);
+  if(!t.length) return '?'; if(t.length===1) return t[0].slice(0,2).toUpperCase();
+  return (t[0][0]+t[t.length-1][0]).toUpperCase();
+}
+function avatar(r,big){ return '<div class="av'+(big?' big':'')+'" style="--club:'+clubColor(r.club)+'" aria-hidden="true">'+esc(initials(r.athlete))+'</div>'; }
+const TABS=[['overview','Overview'],['components','Components'],['stats','Stats'],['honours','Honours']];
+state.tabs=state.tabs||{};
+
 function detailRow(r,ncols){
   const rows=(state.byKey&&state.byKey[r.key])||[];
   const n=v=>(v===undefined||v===null||isNaN(v))?'–':Math.round(v).toLocaleString();
   const n1=v=>(v===undefined||v===null||isNaN(v))?'–':v.toFixed(1);
   const sum=k=>{ let t=0,c=0; rows.forEach(x=>{ const v=x.ex&&x.ex[k]; if(v!==undefined&&!isNaN(v)){ t+=v; c++; } }); return c?t:null; };
-  const first=rows.length?rows[0].season:null, last=rows.length?rows[rows.length-1].season:null;
-  const share={}; r.seasons.forEach(x=>{ share[x.season]=x; });
-  const tiles=[['Apps',n(sum('apps'))],['Minutes',n(sum('minutes'))],['Goals',n(sum('goals'))],['Assists',n(sum('assists'))],['xG',n1(sum('xg'))],['xA',n1(sum('xa'))],
-    ['Clean sheets',n(sum('cs'))],['Saves',n(sum('saves'))],['Yellows',n(sum('yc'))],['Reds',n(sum('rc'))],['Bonus pts',n(sum('bonus'))],['Titles',n(sum('titles'))],['Awards',n(sum('awards'))]];
-  let h='<tr class="detail"><td></td><td colspan="'+(ncols-1)+'">'
-    +'<p class="notes" style="margin:0 0 8px"><b>'+(first?SEAS(first)+' to '+SEAS(last):'')+'</b>'+(rows.length?' · '+rows.length+' Premier League season'+(rows.length>1?'s':''):'')
-    +(state.view==='season'?'. Ranked on '+SEAS(last)+' only; these stats cover every season below.':'. Stats cover every season below.')+'</p>'
-    +'<div class="stgrid">'+tiles.map(t=>'<div><b>'+t[1]+'</b><span>'+t[0]+'</span></div>').join('')+'</div>'
-    +'<table class="dt"><thead><tr><th>Season</th><th>Club</th><th>Apps</th><th>Mins</th><th>Goals</th><th>Assists</th><th>xG</th><th>xA</th><th>CS</th><th>Saves</th><th>YC</th><th>RC</th><th>Rating</th><th>Output</th><th>Impact</th><th>Credit</th><th>Avail.</th><th>Honours</th><th>Form wt</th><th>Career wt</th></tr></thead><tbody>';
-  rows.slice().reverse().forEach(x=>{
-    const e=x.ex||{}, s=share[x.season];
-    h+='<tr><td class="num">'+SEAS(x.season)+'</td><td class="small">'+esc(x.note||'')+'</td>'
-      +'<td class="num">'+n(e.apps)+'</td><td class="num">'+n(e.minutes)+'</td><td class="num">'+n(e.goals)+'</td><td class="num">'+n(e.assists)+'</td>'
-      +'<td class="num">'+n1(e.xg)+'</td><td class="num">'+n1(e.xa)+'</td><td class="num">'+n(e.cs)+'</td><td class="num">'+n(e.saves)+'</td><td class="num">'+n(e.yc)+'</td><td class="num">'+n(e.rc)+'</td>'
-      +'<td class="num">'+(isNaN(x.perfUsed)?'–':x.perfUsed.toFixed(1))+'</td><td class="num">'+n(e.out)+'</td><td class="num">'+n(e.imp)+'</td><td class="num">'+n(e.cred)+'</td><td class="num">'+n(e.avail)+'</td><td class="small">'+esc(x.honours||'')+'</td>'
-      +'<td class="num">'+(s?Math.round(s.shareF*100)+'%':'–')+'</td><td class="num">'+(s?Math.round(s.shareC*100)+'%':'–')+'</td></tr>';
-  });
-  h+='</tbody></table><p class="notes">AthScore <b>'+r.headline.toFixed(1)+'</b> (best single season <b>'+r.peak.toFixed(1)+'</b>; '+r.nT+' league title'+(r.nT===1?'':'s')+', '+r.nA+' other honour'+(r.nA===1?'':'s')+'). Each season is rated 35% Output (goals, assists and chance quality against peers in the same position, measured in standard deviations), 20% Impact (share of the team\'s goals, or clean sheets for defenders and keepers), 20% Credit (the team\'s points per game that year, scaled by how much he played), 15% Honours (titles, cups, European trophies, Golden Boot, Golden Glove and player of the year awards, capped) and 10% Availability and discipline. Career is half the best three seasons and half the games-weighted average. xG, xA, saves and bonus points exist from 2016-17 only; earlier seasons use goals, assists, starts, clean sheets and discipline. Cup and European credit goes to squad regulars as a proxy because the free data has no cup appearances.</p></td></tr>';
+  const lastRow=rows.length?rows[rows.length-1]:null, first=rows.length?rows[0].season:null, last=lastRow?lastRow.season:null;
+  const e=(lastRow&&lastRow.ex)||{};
+  const tab=state.tabs[r.key]||'overview';
+  const rank=state.rankOf&&state.rankOf.get(r.key), prank=state.posRank&&state.posRank.get(r.key), mv=state.moves&&state.moves.get(r.key);
+  const born=lastRow&&!isNaN(lastRow.birth)?lastRow.birth:null;
+  const chipMv=mv&&!mv.isNew&&mv.d!==0?'<span class="pbtn '+(mv.d>0?'up':'dn')+'">'+(mv.d>0?'&#9650; Up ':'&#9660; Down ')+Math.abs(mv.d)+' this round</span>':(mv&&mv.isNew?'<span class="pbtn">New this round</span>':'');
+  let h='<tr class="detail"><td colspan="'+ncols+'"><div class="pcard">'
+    +'<div class="phead" style="--club:'+clubColor(r.club)+'"><div><h3>'+esc(r.athlete)+'</h3>'
+    +'<div class="pmeta"><span class="chip">'+esc(r.club||r.competition)+'</span><span><span class="pos '+esc(r.position)+'">'+esc(r.position)+'</span></span>'
+    +(born?'<span>Born '+born+'</span>':'')+(first?'<span>'+SEAS(first)+' to '+SEAS(last)+'</span>':'')+'<span>'+rows.length+' season'+(rows.length===1?'':'s')+'</span></div>'
+    +'<div class="pactions">'+chipMv+'<span class="pbtn ghost">'+esc(r.confLabel)+' confidence</span></div></div>'
+    +avatar(r,true)+'</div>'
+    +'<div class="pstats"><div><b>'+(prank||'–')+'</b><span>'+esc(r.position)+' rank</span></div><div class="head"><b>'+fmt(r.headline)+'</b><span>AthScore #'+(rank||'–')+'</span></div>'
+    +'<div class="form"><b>'+(fmt(r.form)===null?'n/a':fmt(r.form))+'</b><span>Form</span></div><div class="career"><b>'+(fmt(r.career)===null?'n/a':fmt(r.career))+'</b><span>Career</span></div></div>'
+    +'<div class="tabs" role="tablist" data-key="'+esc(r.key)+'">'+TABS.map(t=>'<button type="button" role="tab" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>').join('')+'</div>'
+    +'<div class="tabbody">';
+  if(tab==='overview'){
+    const comps=[['output',e.out],['impact',e.imp],['team credit',e.cred],['availability',e.avail]].filter(c=>c[1]!==undefined&&!isNaN(c[1]));
+    comps.sort((a,b)=>b[1]-a[1]);
+    let txt=esc(r.athlete)+' has '+n(e.goals)+' goal'+(e.goals===1?'':'s')+' and '+n(e.assists)+' assist'+(e.assists===1?'':'s')+' in '+n(e.apps)+' appearance'+(e.apps===1?'':'s')+' for '+esc(r.club||'')+' in '+SEAS(last)+', a season rating of '+(isNaN(lastRow.perfUsed)?'n/a':lastRow.perfUsed.toFixed(1))+'.';
+    if(comps.length>1) txt+=' The strongest part is '+comps[0][0]+' ('+Math.round(comps[0][1])+') and the weakest is '+comps[comps.length-1][0]+' ('+Math.round(comps[comps.length-1][1])+').';
+    if(r.nT||r.nA) txt+=' Career honours: '+r.nT+' league title'+(r.nT===1?'':'s')+' and '+r.nA+' other honour'+(r.nA===1?'':'s')+'.';
+    h+='<div class="card2"><h4>Season stats</h4><div class="tablewrap" style="border:0"><table class="dt"><thead><tr><th>Season</th><th>Apps</th><th>Mins</th><th>Goals</th><th>Assists</th><th>xG</th><th>xA</th><th>CS</th><th>Saves</th><th>YC</th><th>RC</th></tr></thead><tbody>'
+      +'<tr><td class="num">'+SEAS(last)+'</td><td class="num">'+n(e.apps)+'</td><td class="num">'+n(e.minutes)+'</td><td class="num">'+n(e.goals)+'</td><td class="num">'+n(e.assists)+'</td><td class="num">'+n1(e.xg)+'</td><td class="num">'+n1(e.xa)+'</td><td class="num">'+n(e.cs)+'</td><td class="num">'+n(e.saves)+'</td><td class="num">'+n(e.yc)+'</td><td class="num">'+n(e.rc)+'</td></tr>'
+      +'<tr><td class="num"><b>Career</b></td><td class="num">'+n(sum('apps'))+'</td><td class="num">'+n(sum('minutes'))+'</td><td class="num">'+n(sum('goals'))+'</td><td class="num">'+n(sum('assists'))+'</td><td class="num">'+n1(sum('xg'))+'</td><td class="num">'+n1(sum('xa'))+'</td><td class="num">'+n(sum('cs'))+'</td><td class="num">'+n(sum('saves'))+'</td><td class="num">'+n(sum('yc'))+'</td><td class="num">'+n(sum('rc'))+'</td></tr>'
+      +'</tbody></table></div></div>'
+      +'<div class="card2"><h4>Summary</h4><p class="sumtxt">'+txt+'</p></div>';
+  } else if(tab==='components'){
+    const W=[['Output',.35,e.out,'var(--form)'],['Impact',.20,e.imp,'var(--career)'],['Team credit',.20,e.cred,'#c49bff'],['Honours',.15,e.hon,'var(--accent)'],['Availability',.10,e.avail,'#7fd0ff']];
+    h+='<div class="card2"><h4>How '+SEAS(last)+' is rated</h4><div class="bars">'
+      +W.map(w=>'<div class="bar"><span>'+w[0]+' <em>'+Math.round(w[1]*100)+'%</em></span><i style="--w:'+Math.max(0,Math.min(100,isNaN(w[2])?0:w[2]))+'%;--c:'+w[3]+'"></i><b>'+n(w[2])+'</b></div>').join('')+'</div>'
+      +'<p class="notes">Output is measured against players in the same position that season. Impact is share of the team\'s goals (clean sheets for defenders and keepers). Team credit comes from the team\'s points per game, scaled by minutes played. Honours are titles, cups, European trophies and individual awards, capped each season. Career is half the best three seasons and half the games-weighted average.</p></div>'
+      +'<div class="card2"><h4>Season by season</h4><div class="tablewrap" style="border:0"><table class="dt"><thead><tr><th>Season</th><th>Club</th><th>Rating</th><th>Output</th><th>Impact</th><th>Credit</th><th>Honours</th><th>Avail.</th></tr></thead><tbody>'
+      +rows.slice().reverse().slice(0,12).map(x=>{ const q=x.ex||{}; return '<tr><td class="num">'+SEAS(x.season)+'</td><td class="small">'+esc(x.note||'')+'</td><td class="num"><b>'+(isNaN(x.perfUsed)?'–':x.perfUsed.toFixed(1))+'</b></td><td class="num">'+n(q.out)+'</td><td class="num">'+n(q.imp)+'</td><td class="num">'+n(q.cred)+'</td><td class="num">'+n(q.hon)+'</td><td class="num">'+n(q.avail)+'</td></tr>'; }).join('')
+      +'</tbody></table></div></div>';
+  } else if(tab==='stats'){
+    const tiles=[['Apps',n(sum('apps'))],['Minutes',n(sum('minutes'))],['Goals',n(sum('goals'))],['Assists',n(sum('assists'))],['xG',n1(sum('xg'))],['xA',n1(sum('xa'))],['Clean sheets',n(sum('cs'))],['Saves',n(sum('saves'))],['Yellows',n(sum('yc'))],['Reds',n(sum('rc'))],['Bonus pts',n(sum('bonus'))]];
+    h+='<div class="card2"><h4>Career totals'+(first?' ('+SEAS(first)+' to '+SEAS(last)+')':'')+'</h4><div class="stgrid">'+tiles.map(t=>'<div><b>'+t[1]+'</b><span>'+t[0]+'</span></div>').join('')+'</div></div>'
+      +'<div class="card2"><h4>Every season</h4><div class="tablewrap" style="border:0"><table class="dt"><thead><tr><th>Season</th><th>Club</th><th>Apps</th><th>Mins</th><th>Goals</th><th>Assists</th><th>xG</th><th>xA</th><th>CS</th><th>Saves</th><th>YC</th><th>RC</th></tr></thead><tbody>'
+      +rows.slice().reverse().map(x=>{ const q=x.ex||{}; return '<tr><td class="num">'+SEAS(x.season)+'</td><td class="small">'+esc(x.note||'')+'</td><td class="num">'+n(q.apps)+'</td><td class="num">'+n(q.minutes)+'</td><td class="num">'+n(q.goals)+'</td><td class="num">'+n(q.assists)+'</td><td class="num">'+n1(q.xg)+'</td><td class="num">'+n1(q.xa)+'</td><td class="num">'+n(q.cs)+'</td><td class="num">'+n(q.saves)+'</td><td class="num">'+n(q.yc)+'</td><td class="num">'+n(q.rc)+'</td></tr>'; }).join('')
+      +'</tbody></table></div><p class="notes">xG, xA, saves and bonus points exist from 2016-17 only. Earlier seasons use appearances, goals, assists, clean sheets and cards.</p></div>';
+  } else {
+    const hs=rows.filter(x=>x.honours).slice().reverse();
+    h+='<div class="card2"><h4>Honours</h4>'+(hs.length?'<div class="hon">'+hs.map(x=>'<div><b>'+SEAS(x.season)+'</b><span>'+esc(x.honours)+' <span class="small">('+esc(x.note||'')+')</span></span></div>').join('')+'</div>':'<p class="sumtxt">No league titles, cups or individual awards recorded yet.</p>')
+      +'<p class="notes">Cup and European trophies go to squad regulars (15 or more league appearances) because the free data has no cup appearances.</p></div>';
+  }
+  h+='</div></div></td></tr>';
   return h;
 }
 
@@ -878,9 +974,14 @@ function wire(){
   for(let t=1;t<=6;t++) $('tf'+t).addEventListener('input',update);
   ['search','sportSel','sortSel','minConf','inclInactive'].forEach(id=>$(id).addEventListener('input',()=>{ state.limit=300; renderBoard(); }));
   document.querySelectorAll('.views button').forEach(b=>b.addEventListener('click',()=>{ state.view=b.dataset.view; state.limit=300; state.expanded=new Set(); update(); }));
-  $('tbody').addEventListener('click',e=>{ if(e.target.id==='btnMore'){ state.limit+=300; renderBoard(); return; } const tr=e.target.closest('tr.row'); if(tr) toggleRow(tr); });
+  $('tbody').addEventListener('click',e=>{ const tb=e.target.closest('.tabs button'); if(tb){ state.tabs[tb.parentNode.getAttribute('data-key')]=tb.getAttribute('data-tab'); renderBoard(); return; } if(e.target.closest('tr.detail')) return; if(e.target.id==='btnMore'){ state.limit+=300; renderBoard(); return; } const tr=e.target.closest('tr.row'); if(tr) toggleRow(tr); });
   $('tbody').addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.matches('tr.row')){ e.preventDefault(); toggleRow(e.target); } });
   $('btnCopyRank').addEventListener('click',()=>copyText($('exportBox').value,$('copyMsg'),'Ranking copied.',$('exportBox')));
+  const setDrawer=o=>{ document.body.classList.toggle('drawer',o); $('btnDrawer').setAttribute('aria-expanded',o); };
+  $('btnDrawer').addEventListener('click',()=>setDrawer(!document.body.classList.contains('drawer')));
+  $('btnCloseDrawer').addEventListener('click',()=>setDrawer(false));
+  $('scrim').addEventListener('click',()=>setDrawer(false));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') setDrawer(false); });
   $('csv').value=PLAYERS_CSV;
   importData();
 }
