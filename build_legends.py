@@ -108,6 +108,21 @@ HONOURS = [(re.compile(r"ballon d.or", re.I), "Ballon d'Or", 6.0), (re.compile(r
            (re.compile(r"footballer of the year|player of the year|player of the season|best player", re.I), "Player of the Season", 3.0)]
 
 
+LEAGUE_RX = [("Premier League", re.compile(r"^(english )?(premier league|football league first division|first division|football league)$", re.I), re.compile(r"england|united kingdom", re.I)),
+             ("La Liga", re.compile(r"^(la liga|primera divisi.n|liga espa.ola)$", re.I), None),
+             ("Serie A", re.compile(r"^serie a$", re.I), None),
+             ("Bundesliga", re.compile(r"^bundesliga$", re.I), None),
+             ("Ligue 1", re.compile(r"^(ligue 1|division 1|championnat de france.*)$", re.I), re.compile(r"france", re.I))]
+
+
+def top_league(label, country):
+    """Map a Wikidata league label to one of the five leagues the page covers, or None."""
+    for nm, rx, cx in LEAGUE_RX:
+        if rx.match(str(label or "").strip()) and (cx is None or cx.search(str(country or ""))):
+            return nm
+    return None
+
+
 def year_of(s):
     m = re.match(r"-?(\d{4})", str(s or ""))
     return int(m.group(1)) if m else None
@@ -145,13 +160,15 @@ def build():
             m = float(s["m"] or 0); g = float(s["g"]) if s["g"] not in (None, "") else None
             if m <= 0 or (g is None and pos in ("MID", "FWD")):
                 continue
-            league = s["leagueLabel"] or "Unknown league"
+            league = top_league(s["leagueLabel"], s["countryLabel"])
+            if not league:
+                continue            # only careers in the five leagues the page covers
             for k in range(n):
                 se = ys + 1 + k
                 if se > LAST_SEASON:
                     break
                 rows.append(dict(pid=pid, name=name, pos=pos, by=by, se=se, club=s["teamLabel"] or "", league=league, country=s["countryLabel"] or "",
-                                 apps=m / n, goals=(g or 0.0) / n, tier=2 if SECOND_DIV.search(league) else 1, honours=[]))
+                                 apps=m / n, goals=(g or 0.0) / n, tier=1, honours=[]))
     # merge duplicate (player, season) rows when two spells overlap
     merged = {}
     for r in rows:
