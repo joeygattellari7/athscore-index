@@ -221,6 +221,28 @@ def prev_snapshot(slug, rnd):
     return out
 
 
+def diagnose():
+    """Record what Understat actually returns, so a failed run can be fixed without guessing."""
+    out = {}
+    tests = [("page", "GET", "https://understat.com/league/La_liga/2025", None, {}),
+             ("getLeagueData", "GET", "https://understat.com/getLeagueData/La_liga/2025", None,
+              {"X-Requested-With": "XMLHttpRequest", "Referer": "https://understat.com/league/La_liga/2025"}),
+             ("getPlayersStats", "POST", "https://understat.com/main/getPlayersStats/", b"league=La_liga&season=2025",
+              {"X-Requested-With": "XMLHttpRequest", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": "https://understat.com/league/La_liga/2025"})]
+    for name, meth, url, body, hd in tests:
+        try:
+            req = urllib.request.Request(url, data=body, method=meth, headers=dict(UA, **hd))
+            r = urllib.request.urlopen(req, timeout=60)
+            txt = r.read().decode("utf-8", "replace")
+            out[name] = {"status": r.status, "ctype": r.headers.get("Content-Type"), "len": len(txt), "head": txt[:400],
+                         "vars": re.findall(r"var\s+(\w+)\s*=\s*JSON\.parse", txt)[:10], "scripts": re.findall(r'<script[^>]*src="([^"]+)"', txt)[:10]}
+        except urllib.error.HTTPError as e:
+            out[name] = {"status": e.code, "body": e.read().decode("utf-8", "replace")[:300]}
+        except Exception as e:
+            out[name] = {"error": str(e)}
+    json.dump(out, open("top5_debug.json", "w"), indent=1)
+
+
 def main():
     hdr = "athlete,sport,position,competition,tier,season,games,perf,stat,birth_year,note,apps,minutes,goals,assists,xg,xa,cs,saves,yc,rc,bonus,titles,awards,honours,team_ppg,team_z,current,out,imp,cred,avail,hon,honpts,prev_perf,prev_games".split(",")
     cur_se = CURRENT_YEAR + 1
@@ -250,6 +272,7 @@ def main():
             print(name, len(rows), "player-seasons, round", rnd)
     json.dump({"leagues": status, "failed": FAILED}, open("top5_status.json", "w"))
     if FAILED:
+        diagnose()
         print("FETCH PROBLEMS:", *FAILED, sep="\n  ")
 
 

@@ -35,7 +35,8 @@ jobs:
         run: |
           git config user.name "athscore-bot"
           git config user.email "athscore-bot@users.noreply.github.com"
-          git add state status.json top5_status.json 2>/dev/null || git add state status.json
+          git add state status.json
+          git add top5_status.json top5_debug.json || true
           git diff --cached --quiet || (git commit -m "Snapshot after latest round" && git push)
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }
