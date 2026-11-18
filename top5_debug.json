@@ -1,0 +1,22 @@
+{
+ "page": {
+  "status": 200,
+  "ctype": "text/html",
+  "len": 26719,
+  "head": "<!DOCTYPE html>\n<html>\n    <head>\n\t\t<title>Understat.com</title>\n        <meta charset=\"UTF-8\" />\n        <meta name=\"viewport\" content=\"width=device-width,maximum-scale=1.0,initial-scale=1.0\">\n        <link href=\"/css/errors.css\" rel=\"stylesheet\" media=\"screen\">\n    </head>\n    <body class=\"theme-dark\">\n      <div id=\"image-container\" class=\"player-container\">\n          <div class=\"player\">\n     ",
+  "vars": [],
+  "scripts": []
+ },
+ "getLeagueData": {
+  "status": 200,
+  "ctype": "text/html",
+  "len": 26719,
+  "head": "<!DOCTYPE html>\n<html>\n    <head>\n\t\t<title>Understat.com</title>\n        <meta charset=\"UTF-8\" />\n        <meta name=\"viewport\" content=\"width=device-width,maximum-scale=1.0,initial-scale=1.0\">\n        <link href=\"/css/errors.css\" rel=\"stylesheet\" media=\"screen\">\n    </head>\n    <body class=\"theme-dark\">\n      <div id=\"image-container\" class=\"player-container\">\n          <div class=\"player\">\n     ",
+  "vars": [],
+  "scripts": []
+ },
+ "getPlayersStats": {
+  "status": 405,
+  "body": "<html>\r\n<head><title>405 Not Allowed</title></head>\r\n<body>\r\n<center><h1>405 Not Allowed</h1></center>\r\n<hr><center>nginx/1.24.0 (Ubuntu)</center>\r\n</body>\r\n</html>\r\n<!-- a padding to disable MSIE and Chrome friendly error page -->\r\n<!-- a padding to disable MSIE and Chrome friendly error page -->\r\n"
+ }
+}
