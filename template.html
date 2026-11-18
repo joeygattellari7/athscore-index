@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AthScore Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout idea: narrow left rail for import and scoring settings, wide right board for the ranking. Single dark theme by choice. */
+:root{
+  --bg:#12161d; --panel:#1a2029; --panel2:#212936; --line:#2e3846;
+  --text:#e8ecf2; --muted:#93a0b2; --accent:#f2b84b;
+  --form:#4fd1b5; --career:#7aa7ff; --bad:#ff7a6b;
+  --display:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.45}
+body{padding:0 0 48px}
+header{padding:28px 20px 8px;max-width:1400px;margin:0 auto}
+h1{font-family:var(--display);font-weight:700;font-size:38px;letter-spacing:.02em;margin:0;text-transform:uppercase;text-wrap:balance}
+h1 span{color:var(--accent)}
+.sub{color:var(--muted);max-width:70ch;margin:6px 0 0}
+main{display:grid;grid-template-columns:350px minmax(0,1fr);gap:16px;max-width:1400px;margin:16px auto 0;padding:0 20px;align-items:start}
+@media (max-width:920px){main{grid-template-columns:1fr}}
+.rail{display:flex;flex-direction:column;gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+h2{font-family:var(--display);font-size:20px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 10px;font-weight:600}
+label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px}
+textarea,input,select{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 9px;font:inherit;font-size:14px}
+textarea{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;resize:vertical;line-height:1.4}
+input[type=range]{padding:0;accent-color:var(--accent)}
+input[type=checkbox]{width:auto;accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button,.filebtn{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 12px;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer}
+button:hover,.filebtn:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:#1b1500;border-color:var(--accent);font-weight:600}
+.filebtn input{display:none}
+.status{margin-top:10px;font-size:13px;color:var(--muted)}
+.status b{color:var(--text)}
+.errs{margin:8px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--bad);max-height:110px;overflow:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.field{margin-bottom:10px}
+.hint{font-size:12px;color:var(--muted);margin:4px 0 0}
+.blend{display:flex;justify-content:space-between;font-size:12.5px;margin-top:2px}
+.blend .f{color:var(--form)} .blend .c{color:var(--career)}
+.legend{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.legend b{color:var(--text);font-weight:600}
+.tools{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:12px}
+@media (max-width:1100px){.tools{grid-template-columns:1fr 1fr}}
+.checks{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 12px;font-size:13.5px}
+.checks label{display:flex;align-items:center;gap:6px;color:var(--text);margin:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-family:var(--display);font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--panel2);position:sticky;top:0}
+tbody tr.row{cursor:pointer}
+tbody tr.row:hover{background:#202836}
+td.rank small{display:block;font-family:var(--body,inherit);font-size:11px;font-weight:600;letter-spacing:0}
+.mv-up{color:#3ecf8e}.mv-dn{color:#ff6b6b}.mv-new{color:var(--muted,#9aa)}
+#movers{margin:6px 0 10px}#movers .mvgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){#movers .mvgrid{grid-template-columns:1fr}}
+#movers h3{font-size:13px;margin:0 0 4px}#movers li{font-size:12.5px;list-style:none;padding:2px 0}#movers ul{margin:0;padding:0}
+td.rank{font-family:var(--display);font-size:22px;font-weight:700;color:var(--accent);width:44px;font-variant-numeric:tabular-nums}
+.name{font-weight:600}
+.small{font-size:12.5px;color:var(--muted)}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--panel2)}
+.pill.t1{border-color:var(--accent);color:var(--accent)}
+.pill.off{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.sc{min-width:74px}
+.sc b{font-size:15px;font-weight:600}
+.sc i{display:block;height:4px;border-radius:2px;margin-top:3px;background:var(--line);position:relative;overflow:hidden}
+.sc i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w,0%);background:var(--c,var(--accent));border-radius:2px}
+.sc.form{--c:var(--form)} .sc.career{--c:var(--career)} .sc.head{--c:var(--accent)}
+.conf{min-width:96px;font-size:12.5px}
+.conf i{display:block;height:4px;border-radius:2px;margin-top:3px;background:var(--line);position:relative;overflow:hidden}
+.conf i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w,0%);background:var(--c,var(--muted))}
+tr.detail td{background:#161c26;padding:12px 16px 16px}
+.dt{width:100%;min-width:0;border-collapse:collapse;font-size:13px}
+.dt th{position:static;font-size:12.5px;padding:6px 8px;background:transparent}
+.dt td{padding:5px 8px;border-bottom:1px solid #243040}
+.notes{font-size:12.5px;color:var(--muted);margin:8px 0 0;max-width:90ch}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.exp{margin-top:14px}
+.exp textarea{height:110px}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+details p{font-size:13px;color:var(--muted);margin:8px 0}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--panel2);padding:1px 5px;border-radius:4px}
+@media (prefers-reduced-motion:no-preference){button,.filebtn{transition:border-color .15s}}
+.views{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.views button{padding:9px 18px;font-family:var(--display);font-size:17px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.views button[aria-pressed=true]{background:var(--accent);color:#1b1500;border-color:var(--accent)}
+.viewnote{font-size:13px;color:var(--muted);margin:0 0 12px;max-width:100ch}
+td.st{font-variant-numeric:tabular-nums;text-align:right;font-size:13.5px;white-space:nowrap}
+th.st{text-align:right}
+div.stgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin:0 0 10px}
+div.stgrid div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+div.stgrid b{display:block;font-family:var(--display);font-size:22px;line-height:1.1}
+div.stgrid span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+tr.more td{text-align:center;padding:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>AthScore <span>Index</span></h1>
+  <p class="sub">Import athlete seasons from any sport, score them on one scale, and rank them. Every score is built from competition rank, recency and sample size, and you can change each setting and watch the ranking move.</p>
+</header>
+
+<main>
+  <div class="rail">
+    <section class="panel" aria-labelledby="h-import">
+      <h2 id="h-import">1. Import data</h2>
+      <label for="csv">One row per athlete per season. Paste from Sheets or Excel, or upload a CSV.</label>
+      <textarea id="csv" rows="9" spellcheck="false" placeholder="athlete,sport,position,competition,tier,season,games,perf,stat,birth_year"></textarea>
+      <div class="btns">
+        <button class="primary" id="btnImport" type="button">Import</button>
+        <button id="btnSoccer" type="button">Load soccer index (Ballon d'Or)</button>
+        <button id="btnPL" type="button">Load Premier League 1992 to now (all players)</button>
+        <button id="btnReal" type="button">Load multi-sport pilot</button>
+        <button id="btnSample" type="button">Load fictional sample</button>
+        <label class="filebtn" for="file" style="margin:0">Upload CSV<input type="file" id="file" accept=".csv,.tsv,.txt,text/csv"></label>
+        <button id="btnTemplate" type="button">Copy template</button>
+        <button id="btnClear" type="button">Clear</button>
+      </div>
+      <div class="status" id="status" aria-live="polite"></div>
+      <ul class="errs" id="errs"></ul>
+      <details style="margin-top:10px" open>
+        <summary>About the Premier League index</summary>
+        <p>Every player who has played a minute in the Premier League from 1992-93 to the current season (about 5,300 players). 1992-93 to 2015-16 come from the open epldata database (appearances, starts, goals, assists, cards, clean sheets). 2016-17 onwards come from the Fantasy Premier League data (adds expected goals, expected assists, saves and bonus points). Each season is scored as a percentile against other players in the same position that season. The two eras use different inputs, so scores are close but not exactly like for like. Top flight before 1992 and appearances outside the Premier League are not included.</p>
+      </details>
+      <details style="margin-top:10px">
+        <summary>About the soccer index (version 1)</summary>
+        <p>61 men’s players, built from the France Football Ballon d’Or final top 30 for 2024, 2025 and 2026 (the 2026 list covers August 2025 to July 2026). Each list position becomes a performance score with the same rule as the pilot: 100 × (1 − ln(rank) ÷ ln(200)). Season labels are the award year.</p>
+        <p><b>Limits.</b> This is a voted award, not match statistics, and it only sees players in the top 30 each year, so a strong player outside it (or one who dropped out) has no row, not a low score. It does not yet include the 2026-27 season now under way, and it has no players outside the men’s game. Birth years come from general knowledge, not the sources. Tied places in the sources (2024 and 2026, rank 29) are scored as the same rank. Retired or injured players such as Kroos and Carvajal appear only if you tick include inactive. Next step: replace these scores with per-game statistics from a licensed or open data feed.</p>
+      </details>
+      <details style="margin-top:10px">
+        <summary>About the real pilot data</summary>
+        <p>93 real athletes across tennis (men and women), Formula 1, football (men and women), basketball, golf, rugby league and AFL, from the 2024, 2025 and 2026 seasons. Each season is one published ranking: ATP and WTA year-end rank, F1 championship position, Ballon d'Or rank, NBA MVP voting rank, world golf ranking, Dally M Medal count and Brownlow Medal count.</p>
+        <p>The <code>perf</code> score is worked out from rank with one rule for every sport: 100 × (1 − ln(rank) ÷ ln(200)). Rank 1 scores 100, rank 5 about 70, rank 30 about 36. Athletes missing from a published list have no row for that season, so they are not penalised for it.</p>
+        <p><b>Treat this as a plumbing test, not a verdict.</b> It compares very different ranking lists, every row is tier 1, and games is set to a nominal 40 for full seasons (17 for the part-played 2026 F1 season). Season 2026 covers rankings published up to 25 October 2026, so athletes from lists not yet out for 2026 show only earlier seasons. Birth years come from general knowledge, not from the sources, and a few rankings (such as 2024 positions for Sinner and Alcaraz) were filled from memory.</p>
+      </details>
+      <details style="margin-top:10px">
+        <summary>Column guide</summary>
+        <p><code>athlete</code> <code>sport</code> <code>season</code> <code>tier</code> <code>games</code> are required, plus either <code>perf</code> or <code>stat</code>.</p>
+        <p><code>perf</code> is a 0 to 100 score against peers in the same sport and position (a percentile works well). If <code>perf</code> is blank, the tool converts <code>stat</code> (any number where higher is better) into a percentile within the same sport, position, competition and season. Fewer than about 10 peers in a group gives rough percentiles.</p>
+        <p><code>tier</code> is competition rank from 1 (top in the world) to 6 (community). <code>games</code> is matches or appearances, which sets how much to trust the season. <code>position</code>, <code>competition</code> and <code>birth_year</code> are optional. Use one season convention throughout, such as the year the season ends.</p>
+      </details>
+    </section>
+
+    <section class="panel" aria-labelledby="h-set">
+      <h2 id="h-set">2. Scoring settings</h2>
+      <div class="grid2">
+        <div class="field"><label for="curSeason">Current season</label><input id="curSeason" type="number" step="0.1" value="2027"></div>
+        <div class="field"><label for="priorGames">Games for 50% trust</label><input id="priorGames" type="number" min="1" value="20"></div>
+        <div class="field"><label for="formHL">Form half-life (seasons)</label><input id="formHL" type="number" min="0.1" step="0.1" value="0.5"></div>
+        <div class="field"><label for="careerHL">Career half-life (seasons)</label><input id="careerHL" type="number" min="0.5" step="0.5" value="4"></div>
+      </div>
+      <p class="hint">Honours: AthScore = performance score × (100 − cap) ÷ 100, plus title and award points up to the cap. A title counts when the player made 10+ appearances for the champions. Awards are Golden Boot, Player of the Season and Golden Glove.</p>
+      <div class="field">
+        <label for="blend">AthScore blend</label>
+        <input id="blend" type="range" min="0" max="100" value="60">
+        <div class="blend"><span class="f" id="blendF">Form 60%</span><span class="c" id="blendC">Career 40%</span></div>
+      </div>
+      <label>Rank multipliers (tier 1 to 6)</label>
+      <div class="grid3" id="tfwrap"></div>
+      <p class="hint">A perf score is multiplied by its tier's number, so 90 at tier 3 (0.70) counts as 63 on the shared scale.</p>
+      <p class="legend"><b>Tier guide:</b> 1 top competition in the world for the sport. 2 strong second tier. 3 national top flight in a smaller market. 4 semi-professional. 5 state or regional elite. 6 community.</p>
+    </section>
+  </div>
+
+  <section class="panel" aria-labelledby="h-rank">
+    <h2 id="h-rank">3. Ranking</h2>
+    <div class="views" role="group" aria-label="Ranking view">
+      <button type="button" id="vSeason" data-view="season" aria-pressed="true">Current season</button>
+      <button type="button" id="vCurrent" data-view="current" aria-pressed="false">Current players</button>
+      <button type="button" id="vAll" data-view="alltime" aria-pressed="false">All time</button>
+    </div>
+    <p class="viewnote" id="viewNote"></p>
+    <div id="movers"></div>
+    <div class="tools">
+      <div><label for="search">Search athlete</label><input id="search" type="search" placeholder="Type a name"></div>
+      <div><label for="sportSel">Sport</label><select id="sportSel"><option value="">All sports</option></select></div>
+      <div><label for="sortSel">Rank by</label>
+        <select id="sortSel">
+          <option value="headline">AthScore</option>
+          <option value="form">Form</option>
+          <option value="career">Career</option>
+          <option value="st_goals">Goals</option>
+          <option value="st_assists">Assists</option>
+          <option value="st_minutes">Minutes</option>
+          <option value="st_apps">Appearances</option>
+          <option value="st_cs">Clean sheets</option>
+        </select>
+      </div>
+      <div><label for="minConf">Min. confidence</label>
+        <select id="minConf"><option value="0">Any</option><option value="0.45">Medium+</option><option value="0.7">High</option></select>
+      </div>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="inclInactive"> Include inactive athletes (ranked on Career)</label>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr id="headrow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="small" style="margin:8px 0 0">Select a row to see how each season contributes. Inactive means no season in the last year.</p>
+    <div class="exp">
+      <div class="btns" style="margin-top:0">
+        <button id="btnCopyRank" type="button">Copy ranking as CSV</button>
+        <span class="small" id="copyMsg" aria-live="polite"></span>
+      </div>
+      <textarea id="exportBox" readonly spellcheck="false" aria-label="Ranking as CSV" style="margin-top:8px"></textarea>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ENGINE START */
+const DEFAULTS = {
+  curSeason: 2026, formHL: 0.5, careerHL: 4, priorGames: 20, blend: 0.6,
+  priorPerf: 50, youthAge: 23, youthBonus: 1.5,
+  tierFactor: {1:1, 2:0.85, 3:0.7, 4:0.55, 5:0.4, 6:0.25}
+};
+
+const SAMPLE_CSV = `athlete,sport,position,competition,tier,season,games,perf,stat,birth_year
+Rafa Duarte,Football,Winger,Championship,2,2021,38,58,,1996
+Rafa Duarte,Football,Winger,Championship,2,2022,36,62,,1996
+Rafa Duarte,Football,Winger,Top League,1,2023,35,66,,1996
+Rafa Duarte,Football,Winger,Top League,1,2024,36,70,,1996
+Rafa Duarte,Football,Winger,Top League,1,2025,40,78,,1996
+Rafa Duarte,Football,Winger,Top League,1,2026,18,90,,1996
+Lamin Okoro,Football,Winger,Top League,1,2024,30,82,,2007
+Lamin Okoro,Football,Winger,Top League,1,2025,38,88,,2007
+Lamin Okoro,Football,Winger,Top League,1,2026,20,92,,2007
+Mateo Silva,Football,Striker,Top League,1,2023,34,80,,1998
+Mateo Silva,Football,Striker,Top League,1,2024,36,84,,1998
+Mateo Silva,Football,Striker,Top League,1,2025,35,86,,1998
+Mateo Silva,Football,Striker,Top League,1,2026,17,87,,1998
+Kai Brandt,Football,Midfielder,Top League,1,2022,36,85,,1994
+Kai Brandt,Football,Midfielder,Top League,1,2023,34,82,,1994
+Kai Brandt,Football,Midfielder,Top League,1,2024,30,76,,1994
+Kai Brandt,Football,Midfielder,Top League,1,2025,28,70,,1994
+Kai Brandt,Football,Midfielder,Top League,1,2026,15,66,,1994
+Jonas Vik,Football,Striker,Lower Division,3,2024,30,90,,2001
+Jonas Vik,Football,Striker,Lower Division,3,2025,34,92,,2001
+Jonas Vik,Football,Striker,Lower Division,3,2026,16,91,,2001
+Tom Reyes,Football,Defender,Second Division,2,2026,4,70,,2003
+Dario Keane,Football,Midfielder,Top League,1,2020,34,88,,1987
+Dario Keane,Football,Midfielder,Top League,1,2021,33,85,,1987
+Dario Keane,Football,Midfielder,Top League,1,2022,20,80,,1987
+Marcus Hale,Basketball,Guard,Pro League,1,2025,78,,26.0,
+Devon Pratt,Basketball,Guard,Pro League,1,2025,80,,21.3,
+Eli Soto,Basketball,Guard,Pro League,1,2025,75,,18.1,
+Quincy Bray,Basketball,Guard,Pro League,1,2025,70,,15.0,
+Nate Okafor,Basketball,Guard,Pro League,1,2025,76,,23.0,
+Ty Mercer,Basketball,Guard,Pro League,1,2025,72,,19.6,
+Alvin Cole,Basketball,Guard,Pro League,1,2025,66,,12.1,
+Marcus Hale,Basketball,Guard,Pro League,1,2026,20,,27.1,
+Devon Pratt,Basketball,Guard,Pro League,1,2026,20,,22.4,
+Eli Soto,Basketball,Guard,Pro League,1,2026,20,,18.9,
+Quincy Bray,Basketball,Guard,Pro League,1,2026,19,,16.2,
+Nate Okafor,Basketball,Guard,Pro League,1,2026,20,,24.8,
+Ty Mercer,Basketball,Guard,Pro League,1,2026,20,,20.5,
+Alvin Cole,Basketball,Guard,Pro League,1,2026,18,,12.8,
+Luca Ferretti,Tennis,Singles,Tour,1,2024,70,88,,1998
+Luca Ferretti,Tennis,Singles,Tour,1,2025,72,90,,1998
+Luca Ferretti,Tennis,Singles,Tour,1,2026,65,89,,1998
+Sam Whitlock,Tennis,Singles,Tour,1,2024,60,70,,2002
+Sam Whitlock,Tennis,Singles,Tour,1,2025,62,74,,2002
+Sam Whitlock,Tennis,Singles,Tour,1,2026,55,79,,2002
+Ben Tuilagi,Rugby League,Forward,Top Comp,1,2025,24,85,,1999
+Ben Tuilagi,Rugby League,Forward,Top Comp,1,2026,25,83,,1999
+Jy Maloney,Rugby League,Halfback,Top Comp,1,2025,20,70,,2000
+Jy Maloney,Rugby League,Halfback,Top Comp,1,2026,25,75,,2000
+Cooper Hale,Rugby League,Halfback,State Cup,2,2025,20,88,,2002
+Cooper Hale,Rugby League,Halfback,State Cup,2,2026,22,92,,2002`;
+
+const SOCCER_CSV = `athlete,sport,position,competition,tier,season,games,perf,stat,birth_year,note
+Rodri,Football,All,Ballon d'Or rank,1,2024,40,100.0,,1996,rank 1
+Vinícius Júnior,Football,All,Ballon d'Or rank,1,2024,40,86.9,,2000,rank 2
+Jude Bellingham,Football,All,Ballon d'Or rank,1,2024,40,79.3,,2003,rank 3
+Dani Carvajal,Football,All,Ballon d'Or rank,1,2024,40,73.8,,1992,rank 4
+Erling Haaland,Football,All,Ballon d'Or rank,1,2024,40,69.6,,2000,rank 5
+Kylian Mbappé,Football,All,Ballon d'Or rank,1,2024,40,66.2,,1998,rank 6
+Lautaro Martínez,Football,All,Ballon d'Or rank,1,2024,40,63.3,,1997,rank 7
+Lamine Yamal,Football,All,Ballon d'Or rank,1,2024,40,60.8,,2007,rank 8
+Toni Kroos,Football,All,Ballon d'Or rank,1,2024,40,58.5,,1990,rank 9
+Harry Kane,Football,All,Ballon d'Or rank,1,2024,40,56.5,,1993,rank 10
+Phil Foden,Football,All,Ballon d'Or rank,1,2024,40,54.7,,2000,rank 11
+Florian Wirtz,Football,All,Ballon d'Or rank,1,2024,40,53.1,,2003,rank 12
+Dani Olmo,Football,All,Ballon d'Or rank,1,2024,40,51.6,,1998,rank 13
+Ademola Lookman,Football,All,Ballon d'Or rank,1,2024,40,50.2,,1997,rank 14
+Nico Williams,Football,All,Ballon d'Or rank,1,2024,40,48.9,,2002,rank 15
+Granit Xhaka,Football,All,Ballon d'Or rank,1,2024,40,47.7,,1992,rank 16
+Federico Valverde,Football,All,Ballon d'Or rank,1,2024,40,46.5,,1998,rank 17
+Emiliano Martínez,Football,All,Ballon d'Or rank,1,2024,40,45.4,,1992,rank 18
+Martin Ødegaard,Football,All,Ballon d'Or rank,1,2024,40,44.4,,1998,rank 19
+Hakan Çalhanoğlu,Football,All,Ballon d'Or rank,1,2024,40,43.5,,1994,rank 20
+Bukayo Saka,Football,All,Ballon d'Or rank,1,2024,40,42.5,,2001,rank 21
+Antonio Rüdiger,Football,All,Ballon d'Or rank,1,2024,40,41.7,,1993,rank 22
+Rúben Dias,Football,All,Ballon d'Or rank,1,2024,40,40.8,,1997,rank 23
+William Saliba,Football,All,Ballon d'Or rank,1,2024,40,40.0,,2001,rank 24
+Cole Palmer,Football,All,Ballon d'Or rank,1,2024,40,39.2,,2002,rank 25
+Declan Rice,Football,All,Ballon d'Or rank,1,2024,40,38.5,,1999,rank 26
+Vitinha,Football,All,Ballon d'Or rank,1,2024,40,37.8,,2000,rank 27
+Alejandro Grimaldo,Football,All,Ballon d'Or rank,1,2024,40,37.1,,1995,rank 28
+Mats Hummels,Football,All,Ballon d'Or rank,1,2024,40,36.4,,1988,rank 29
+Artem Dovbyk,Football,All,Ballon d'Or rank,1,2024,40,36.4,,1997,rank 29
+Ousmane Dembélé,Football,All,Ballon d'Or rank,1,2025,40,100.0,,1997,rank 1
+Lamine Yamal,Football,All,Ballon d'Or rank,1,2025,40,86.9,,2007,rank 2
+Vitinha,Football,All,Ballon d'Or rank,1,2025,40,79.3,,2000,rank 3
+Mohamed Salah,Football,All,Ballon d'Or rank,1,2025,40,73.8,,1992,rank 4
+Raphinha,Football,All,Ballon d'Or rank,1,2025,40,69.6,,1996,rank 5
+Achraf Hakimi,Football,All,Ballon d'Or rank,1,2025,40,66.2,,1998,rank 6
+Kylian Mbappé,Football,All,Ballon d'Or rank,1,2025,40,63.3,,1998,rank 7
+Cole Palmer,Football,All,Ballon d'Or rank,1,2025,40,60.8,,2002,rank 8
+Gianluigi Donnarumma,Football,All,Ballon d'Or rank,1,2025,40,58.5,,1999,rank 9
+Nuno Mendes,Football,All,Ballon d'Or rank,1,2025,40,56.5,,2002,rank 10
+Pedri,Football,All,Ballon d'Or rank,1,2025,40,54.7,,2002,rank 11
+Khvicha Kvaratskhelia,Football,All,Ballon d'Or rank,1,2025,40,53.1,,2001,rank 12
+Harry Kane,Football,All,Ballon d'Or rank,1,2025,40,51.6,,1993,rank 13
+Désiré Doué,Football,All,Ballon d'Or rank,1,2025,40,50.2,,2005,rank 14
+Viktor Gyökeres,Football,All,Ballon d'Or rank,1,2025,40,48.9,,1998,rank 15
+Vinícius Júnior,Football,All,Ballon d'Or rank,1,2025,40,47.7,,2000,rank 16
+Robert Lewandowski,Football,All,Ballon d'Or rank,1,2025,40,46.5,,1988,rank 17
+Scott McTominay,Football,All,Ballon d'Or rank,1,2025,40,45.4,,1996,rank 18
+João Neves,Football,All,Ballon d'Or rank,1,2025,40,44.4,,2004,rank 19
+Lautaro Martínez,Football,All,Ballon d'Or rank,1,2025,40,43.5,,1997,rank 20
+Serhou Guirassy,Football,All,Ballon d'Or rank,1,2025,40,42.5,,1996,rank 21
+Alexis Mac Allister,Football,All,Ballon d'Or rank,1,2025,40,41.7,,1998,rank 22
+Jude Bellingham,Football,All,Ballon d'Or rank,1,2025,40,40.8,,2003,rank 23
+Fabián Ruiz,Football,All,Ballon d'Or rank,1,2025,40,40.0,,1996,rank 24
+Denzel Dumfries,Football,All,Ballon d'Or rank,1,2025,40,39.2,,1996,rank 25
+Erling Haaland,Football,All,Ballon d'Or rank,1,2025,40,38.5,,2000,rank 26
+Declan Rice,Football,All,Ballon d'Or rank,1,2025,40,37.8,,1999,rank 27
+Virgil van Dijk,Football,All,Ballon d'Or rank,1,2025,40,37.1,,1991,rank 28
+Florian Wirtz,Football,All,Ballon d'Or rank,1,2025,40,36.4,,2003,rank 29
+Michael Olise,Football,All,Ballon d'Or rank,1,2025,40,35.8,,2001,rank 30
+Harry Kane,Football,All,Ballon d'Or rank,1,2026,40,100.0,,1993,rank 1
+Kylian Mbappé,Football,All,Ballon d'Or rank,1,2026,40,86.9,,1998,rank 2
+Lamine Yamal,Football,All,Ballon d'Or rank,1,2026,40,79.3,,2007,rank 3
+Rodri,Football,All,Ballon d'Or rank,1,2026,40,73.8,,1996,rank 4
+Lionel Messi,Football,All,Ballon d'Or rank,1,2026,40,69.6,,1987,rank 5
+Khvicha Kvaratskhelia,Football,All,Ballon d'Or rank,1,2026,40,66.2,,2001,rank 6
+Ousmane Dembélé,Football,All,Ballon d'Or rank,1,2026,40,63.3,,1997,rank 7
+Erling Haaland,Football,All,Ballon d'Or rank,1,2026,40,60.8,,2000,rank 8
+Michael Olise,Football,All,Ballon d'Or rank,1,2026,40,58.5,,2001,rank 9
+Fabián Ruiz,Football,All,Ballon d'Or rank,1,2026,40,56.5,,1996,rank 10
+Jude Bellingham,Football,All,Ballon d'Or rank,1,2026,40,54.7,,2003,rank 11
+Pau Cubarsí,Football,All,Ballon d'Or rank,1,2026,40,53.1,,2007,rank 12
+Achraf Hakimi,Football,All,Ballon d'Or rank,1,2026,40,51.6,,1998,rank 13
+Vitinha,Football,All,Ballon d'Or rank,1,2026,40,50.2,,2000,rank 14
+Declan Rice,Football,All,Ballon d'Or rank,1,2026,40,48.9,,1999,rank 15
+Ferran Torres,Football,All,Ballon d'Or rank,1,2026,40,47.7,,2000,rank 16
+Vinícius Júnior,Football,All,Ballon d'Or rank,1,2026,40,46.5,,2000,rank 17
+Marc Cucurella,Football,All,Ballon d'Or rank,1,2026,40,45.4,,1998,rank 18
+João Neves,Football,All,Ballon d'Or rank,1,2026,40,44.4,,2004,rank 19
+Willian Pacho,Football,All,Ballon d'Or rank,1,2026,40,43.5,,2001,rank 20
+Gabriel Magalhães,Football,All,Ballon d'Or rank,1,2026,40,42.5,,1997,rank 21
+Lautaro Martínez,Football,All,Ballon d'Or rank,1,2026,40,41.7,,1997,rank 22
+Nuno Mendes,Football,All,Ballon d'Or rank,1,2026,40,40.8,,2002,rank 23
+Luis Díaz,Football,All,Ballon d'Or rank,1,2026,40,40.0,,1997,rank 24
+Marquinhos,Football,All,Ballon d'Or rank,1,2026,40,39.2,,1994,rank 25
+Dayot Upamecano,Football,All,Ballon d'Or rank,1,2026,40,38.5,,1998,rank 26
+Bruno Fernandes,Football,All,Ballon d'Or rank,1,2026,40,37.8,,1994,rank 27
+Julián Quiñones,Football,All,Ballon d'Or rank,1,2026,40,37.1,,1997,rank 28
+William Saliba,Football,All,Ballon d'Or rank,1,2026,40,36.4,,2001,rank 29
+Sadio Mané,Football,All,Ballon d'Or rank,1,2026,40,36.4,,1992,rank 29`;
+const PLAYERS_CSV = `__PLAYERS_CSV__`;
+const REAL_CSV = `athlete,sport,position,competition,tier,season,games,perf,stat,birth_year,note
+Jannik Sinner,Tennis (men),All,ATP year-end rank,1,2024,40,100.0,,2001,rank 1
+Alexander Zverev,Tennis (men),All,ATP year-end rank,1,2024,40,86.9,,1997,rank 2
+Carlos Alcaraz,Tennis (men),All,ATP year-end rank,1,2024,40,79.3,,2003,rank 3
+Taylor Fritz,Tennis (men),All,ATP year-end rank,1,2024,40,73.8,,1997,rank 4
+Casper Ruud,Tennis (men),All,ATP year-end rank,1,2024,40,66.2,,1998,rank 6
+Novak Djokovic,Tennis (men),All,ATP year-end rank,1,2024,40,63.3,,1987,rank 7
+Alex de Minaur,Tennis (men),All,ATP year-end rank,1,2024,40,58.5,,1999,rank 9
+Jack Draper,Tennis (men),All,ATP year-end rank,1,2024,40,48.9,,2002,rank 15
+Lorenzo Musetti,Tennis (men),All,ATP year-end rank,1,2024,40,46.5,,2002,rank 17
+Ben Shelton,Tennis (men),All,ATP year-end rank,1,2024,40,42.5,,2002,rank 21
+Felix Auger-Aliassime,Tennis (men),All,ATP year-end rank,1,2024,40,36.4,,2000,rank 29
+Carlos Alcaraz,Tennis (men),All,ATP year-end rank,1,2025,40,100.0,,2003,rank 1
+Jannik Sinner,Tennis (men),All,ATP year-end rank,1,2025,40,86.9,,2001,rank 2
+Alexander Zverev,Tennis (men),All,ATP year-end rank,1,2025,40,79.3,,1997,rank 3
+Novak Djokovic,Tennis (men),All,ATP year-end rank,1,2025,40,73.8,,1987,rank 4
+Felix Auger-Aliassime,Tennis (men),All,ATP year-end rank,1,2025,40,69.6,,2000,rank 5
+Taylor Fritz,Tennis (men),All,ATP year-end rank,1,2025,40,66.2,,1997,rank 6
+Alex de Minaur,Tennis (men),All,ATP year-end rank,1,2025,40,63.3,,1999,rank 7
+Lorenzo Musetti,Tennis (men),All,ATP year-end rank,1,2025,40,60.8,,2002,rank 8
+Ben Shelton,Tennis (men),All,ATP year-end rank,1,2025,40,58.5,,2002,rank 9
+Jack Draper,Tennis (men),All,ATP year-end rank,1,2025,40,56.5,,2002,rank 10
+Casper Ruud,Tennis (men),All,ATP year-end rank,1,2025,40,53.1,,1998,rank 12
+Andrey Rublev,Tennis (men),All,ATP year-end rank,1,2025,40,47.7,,1997,rank 16
+Karen Khachanov,Tennis (men),All,ATP year-end rank,1,2025,40,45.4,,1996,rank 18
+Daniil Medvedev,Tennis (men),All,ATP year-end rank,1,2025,40,35.8,,1996,rank 30
+Stefanos Tsitsipas,Tennis (men),All,ATP year-end rank,1,2025,40,33.4,,1998,rank 34
+Grigor Dimitrov,Tennis (men),All,ATP year-end rank,1,2025,40,28.6,,1991,rank 44
+Jannik Sinner,Tennis (men),All,"ATP rank, 19 Oct 2026",1,2026,40,100.0,,2001,rank 1
+Alexander Zverev,Tennis (men),All,"ATP rank, 19 Oct 2026",1,2026,40,86.9,,1997,rank 2
+Carlos Alcaraz,Tennis (men),All,"ATP rank, 19 Oct 2026",1,2026,40,79.3,,2003,rank 3
+Aryna Sabalenka,Tennis (women),All,WTA year-end rank,1,2024,40,100.0,,1998,rank 1
+Iga Swiatek,Tennis (women),All,WTA year-end rank,1,2024,40,86.9,,2001,rank 2
+Coco Gauff,Tennis (women),All,WTA year-end rank,1,2024,40,79.3,,2004,rank 3
+Jasmine Paolini,Tennis (women),All,WTA year-end rank,1,2024,40,73.8,,1996,rank 4
+Aryna Sabalenka,Tennis (women),All,WTA year-end rank,1,2025,40,100.0,,1998,rank 1
+Iga Swiatek,Tennis (women),All,WTA year-end rank,1,2025,40,86.9,,2001,rank 2
+Coco Gauff,Tennis (women),All,WTA year-end rank,1,2025,40,79.3,,2004,rank 3
+Amanda Anisimova,Tennis (women),All,WTA year-end rank,1,2025,40,73.8,,2001,rank 4
+Elena Rybakina,Tennis (women),All,WTA year-end rank,1,2025,40,69.6,,1999,rank 5
+Jessica Pegula,Tennis (women),All,WTA year-end rank,1,2025,40,66.2,,1994,rank 6
+Madison Keys,Tennis (women),All,WTA year-end rank,1,2025,40,63.3,,1995,rank 7
+Jasmine Paolini,Tennis (women),All,WTA year-end rank,1,2025,40,60.8,,1996,rank 8
+Mirra Andreeva,Tennis (women),All,WTA year-end rank,1,2025,40,58.5,,2007,rank 9
+Ekaterina Alexandrova,Tennis (women),All,WTA year-end rank,1,2025,40,56.5,,1994,rank 10
+Lando Norris,Formula 1,All,F1 drivers' championship position,1,2025,40,100.0,,1999,rank 1
+Max Verstappen,Formula 1,All,F1 drivers' championship position,1,2025,40,86.9,,1997,rank 2
+Oscar Piastri,Formula 1,All,F1 drivers' championship position,1,2025,40,79.3,,2001,rank 3
+George Russell,Formula 1,All,F1 drivers' championship position,1,2025,40,73.8,,1998,rank 4
+Charles Leclerc,Formula 1,All,F1 drivers' championship position,1,2025,40,69.6,,1997,rank 5
+Lewis Hamilton,Formula 1,All,F1 drivers' championship position,1,2025,40,66.2,,1985,rank 6
+Kimi Antonelli,Formula 1,All,F1 drivers' championship position,1,2025,40,63.3,,2006,rank 7
+Alex Albon,Formula 1,All,F1 drivers' championship position,1,2025,40,60.8,,1996,rank 8
+Kimi Antonelli,Formula 1,All,"F1 position, 17 of 23 rounds",1,2026,17,100.0,,2006,rank 1
+George Russell,Formula 1,All,"F1 position, 17 of 23 rounds",1,2026,17,86.9,,1998,rank 2
+Rodri,Football,All,Ballon d'Or rank,1,2024,40,100.0,,1996,rank 1
+Vinícius Júnior,Football,All,Ballon d'Or rank,1,2024,40,86.9,,2000,rank 2
+Ousmane Dembélé,Football,All,Ballon d'Or rank,1,2025,40,100.0,,1997,rank 1
+Lamine Yamal,Football,All,Ballon d'Or rank,1,2025,40,86.9,,2007,rank 2
+Vitinha,Football,All,Ballon d'Or rank,1,2025,40,79.3,,2000,rank 3
+Mohamed Salah,Football,All,Ballon d'Or rank,1,2025,40,73.8,,1992,rank 4
+Raphinha,Football,All,Ballon d'Or rank,1,2025,40,69.6,,1996,rank 5
+Achraf Hakimi,Football,All,Ballon d'Or rank,1,2025,40,66.2,,1998,rank 6
+Kylian Mbappé,Football,All,Ballon d'Or rank,1,2025,40,63.3,,1998,rank 7
+Cole Palmer,Football,All,Ballon d'Or rank,1,2025,40,60.8,,2002,rank 8
+Harry Kane,Football,All,Ballon d'Or rank,1,2025,40,51.6,,1993,rank 13
+Vinícius Júnior,Football,All,Ballon d'Or rank,1,2025,40,47.7,,2000,rank 16
+Erling Haaland,Football,All,Ballon d'Or rank,1,2025,40,38.5,,2000,rank 26
+Declan Rice,Football,All,Ballon d'Or rank,1,2025,40,37.8,,1999,rank 27
+Virgil van Dijk,Football,All,Ballon d'Or rank,1,2025,40,37.1,,1991,rank 28
+Florian Wirtz,Football,All,Ballon d'Or rank,1,2025,40,36.4,,2003,rank 29
+Michael Olise,Football,All,Ballon d'Or rank,1,2025,40,35.8,,2001,rank 30
+Harry Kane,Football,All,Ballon d'Or rank,1,2026,40,100.0,,1993,rank 1
+Kylian Mbappé,Football,All,Ballon d'Or rank,1,2026,40,86.9,,1998,rank 2
+Lamine Yamal,Football,All,Ballon d'Or rank,1,2026,40,79.3,,2007,rank 3
+Rodri,Football,All,Ballon d'Or rank,1,2026,40,73.8,,1996,rank 4
+Lionel Messi,Football,All,Ballon d'Or rank,1,2026,40,69.6,,1987,rank 5
+Khvicha Kvaratskhelia,Football,All,Ballon d'Or rank,1,2026,40,66.2,,2001,rank 6
+Ousmane Dembélé,Football,All,Ballon d'Or rank,1,2026,40,63.3,,1997,rank 7
+Erling Haaland,Football,All,Ballon d'Or rank,1,2026,40,60.8,,2000,rank 8
+Michael Olise,Football,All,Ballon d'Or rank,1,2026,40,58.5,,2001,rank 9
+Fabián Ruiz,Football,All,Ballon d'Or rank,1,2026,40,56.5,,1996,rank 10
+Jude Bellingham,Football,All,Ballon d'Or rank,1,2026,40,54.7,,2003,rank 11
+Vitinha,Football,All,Ballon d'Or rank,1,2026,40,50.2,,2000,rank 14
+Declan Rice,Football,All,Ballon d'Or rank,1,2026,40,48.9,,1999,rank 15
+Aitana Bonmatí,Football (women),All,Women's Ballon d'Or rank,1,2025,40,100.0,,1998,rank 1
+Mariona Caldentey,Football (women),All,Women's Ballon d'Or rank,1,2025,40,86.9,,1996,rank 2
+Alessia Russo,Football (women),All,Women's Ballon d'Or rank,1,2025,40,79.3,,1999,rank 3
+Alexia Putellas,Football (women),All,Women's Ballon d'Or rank,1,2025,40,73.8,,1994,rank 4
+Nikola Jokić,Basketball,All,NBA MVP voting rank,1,2024,40,100.0,,1995,rank 1
+Shai Gilgeous-Alexander,Basketball,All,NBA MVP voting rank,1,2024,40,86.9,,1998,rank 2
+Shai Gilgeous-Alexander,Basketball,All,NBA MVP voting rank,1,2025,40,100.0,,1998,rank 1
+Nikola Jokić,Basketball,All,NBA MVP voting rank,1,2025,40,86.9,,1995,rank 2
+Cade Cunningham,Basketball,All,NBA MVP voting rank,1,2025,40,63.3,,2001,rank 7
+Shai Gilgeous-Alexander,Basketball,All,NBA MVP voting rank,1,2026,40,100.0,,1998,rank 1
+Nikola Jokić,Basketball,All,NBA MVP voting rank,1,2026,40,86.9,,1995,rank 2
+Victor Wembanyama,Basketball,All,NBA MVP voting rank,1,2026,40,79.3,,2004,rank 3
+Luka Dončić,Basketball,All,NBA MVP voting rank,1,2026,40,73.8,,1999,rank 4
+Cade Cunningham,Basketball,All,NBA MVP voting rank,1,2026,40,69.6,,2001,rank 5
+Jaylen Brown,Basketball,All,NBA MVP voting rank,1,2026,40,66.2,,1996,rank 6
+Scottie Scheffler,Golf (men),All,"OWGR rank, end of year",1,2025,40,100.0,,1996,rank 1
+Rory McIlroy,Golf (men),All,"OWGR rank, end of year",1,2025,40,86.9,,1989,rank 2
+Tommy Fleetwood,Golf (men),All,"OWGR rank, end of year",1,2025,40,79.3,,1991,rank 3
+Russell Henley,Golf (men),All,"OWGR rank, end of year",1,2025,40,69.6,,1989,rank 5
+J.J. Spaun,Golf (men),All,"OWGR rank, end of year",1,2025,40,66.2,,1990,rank 6
+Robert MacIntyre,Golf (men),All,"OWGR rank, end of year",1,2025,40,63.3,,1996,rank 7
+Justin Thomas,Golf (men),All,"OWGR rank, end of year",1,2025,40,60.8,,1993,rank 8
+Justin Rose,Golf (men),All,"OWGR rank, end of year",1,2025,40,56.5,,1980,rank 10
+Harris English,Golf (men),All,"OWGR rank, end of year",1,2025,40,51.6,,1989,rank 13
+Viktor Hovland,Golf (men),All,"OWGR rank, end of year",1,2025,40,50.2,,1997,rank 14
+Scottie Scheffler,Golf (men),All,"OWGR rank, 25 Oct 2026",1,2026,40,100.0,,1996,rank 1
+Sam Burns,Golf (men),All,"OWGR rank, 25 Oct 2026",1,2026,40,56.5,,1996,rank 10
+James Tedesco,Rugby league,All,Dally M Medal count rank,1,2025,40,100.0,,1993,rank 1
+Nathan Cleary,Rugby league,All,Dally M Medal count rank,1,2026,40,100.0,,1997,rank 1
+Braydon Trindall,Rugby league,All,Dally M Medal count rank,1,2026,40,86.9,,,rank 2
+Dylan Edwards,Rugby league,All,Dally M Medal count rank,1,2026,40,79.3,,,rank 3
+Patrick Cripps,AFL,All,Brownlow Medal count rank,1,2024,40,100.0,,1995,rank 1
+Nick Daicos,AFL,All,Brownlow Medal count rank,1,2024,40,86.9,,2003,rank 2
+Matt Rowell,AFL,All,Brownlow Medal count rank,1,2025,40,100.0,,,rank 1
+Nick Daicos,AFL,All,Brownlow Medal count rank,1,2025,40,86.9,,2003,rank 2
+Bailey Smith,AFL,All,Brownlow Medal count rank,1,2025,40,79.3,,,rank 3
+Jordan Dawson,AFL,All,Brownlow Medal count rank,1,2025,40,73.8,,,rank 4
+Andrew Brayshaw,AFL,All,Brownlow Medal count rank,1,2025,40,69.6,,,rank 5
+Noah Anderson,AFL,All,Brownlow Medal count rank,1,2025,40,66.2,,,rank 6
+Marcus Bontempelli,AFL,All,Brownlow Medal count rank,1,2025,40,63.3,,1996,rank 7
+Caleb Serong,AFL,All,Brownlow Medal count rank,1,2025,40,60.8,,,rank 8
+Max Gawn,AFL,All,Brownlow Medal count rank,1,2025,40,58.5,,1991,rank 9
+Nasiah Wanganeen-Milera,AFL,All,Brownlow Medal count rank,1,2025,40,56.5,,,rank 10
+Nick Daicos,AFL,All,Brownlow Medal count rank,1,2026,40,100.0,,2003,rank 1
+Bailey Smith,AFL,All,Brownlow Medal count rank,1,2026,40,86.9,,,rank 2
+Marcus Bontempelli,AFL,All,Brownlow Medal count rank,1,2026,40,79.3,,1996,rank 3
+Max Gawn,AFL,All,Brownlow Medal count rank,1,2026,40,73.8,,1991,rank 4
+Will Ashcroft,AFL,All,Brownlow Medal count rank,1,2026,40,69.6,,2004,rank 5
+Patrick Cripps,AFL,All,Brownlow Medal count rank,1,2026,40,69.6,,1995,rank 5
+Harry Sheezel,AFL,All,Brownlow Medal count rank,1,2026,40,69.6,,2002,rank 5
+Clayton Oliver,AFL,All,Brownlow Medal count rank,1,2026,40,60.8,,1997,rank 8`;
+
+function parseDelimited(text){
+  text = String(text).replace(/^﻿/,'').replace(/\r\n?/g,'\n').trim();
+  if(!text) return [];
+  const first = text.split('\n')[0];
+  const delim = first.includes('\t') ? '\t' : (first.split(';').length > first.split(',').length ? ';' : ',');
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=c;
+    } else if(c==='"') q=true;
+    else if(c===delim){ row.push(cur); cur=''; }
+    else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+    else cur+=c;
+  }
+  row.push(cur); rows.push(row);
+  return rows.filter(r=>r.some(x=>x.trim()!==''));
+}
+
+const EXTRA=['apps','minutes','goals','assists','xg','xa','cs','saves','yc','rc','bonus','titles','awards','out','imp','cred','avail','hon','honpts','prev_perf','prev_games'];
+const ALIASES = {
+  athlete:['athlete','name','player','athlete_name'],
+  sport:['sport'],
+  position:['position','pos','role'],
+  competition:['competition','league','comp','tournament'],
+  tier:['tier','level','competition_tier'],
+  season:['season','year'],
+  games:['games','gp','matches','apps','appearances','sample'],
+  perf:['perf','performance','score','rating','percentile'],
+  stat:['stat','metric','value'],
+  birth:['birth_year','birth','born','birthyear','yob'],
+  note:['note','notes','source']
+};
+
+function toRecords(table){
+  if(table.length<2) return {rows:[],errors:['Add a header row and at least one data row.']};
+  const head = table[0].map(h=>h.trim().toLowerCase().replace(/\s+/g,'_'));
+  const idx={}; for(const k in ALIASES){ idx[k]=head.findIndex(h=>ALIASES[k].includes(h)); }
+  const errors=[];
+  for(const req of ['athlete','sport','season','tier','games']) if(idx[req]<0) errors.push('Missing column: '+req);
+  if(idx.perf<0 && idx.stat<0) errors.push('Add a perf column or a stat column.');
+  if(errors.length) return {rows:[],errors};
+  const get=(r,k)=> idx[k]>=0 ? (r[idx[k]]||'').trim() : '';
+  const xi={}; EXTRA.forEach(k=>{ xi[k]=head.indexOf(k); }); const ci=head.indexOf('current'), hi=head.indexOf('honours');
+  const num = s => s===''?NaN:Number(String(s).replace(/,/g,''));
+  const rows=[];
+  table.slice(1).forEach((r,i)=>{
+    const line=i+2;
+    const o={athlete:get(r,'athlete'), sport:get(r,'sport'), position:get(r,'position')||'All', competition:get(r,'competition'),
+      tier:num(get(r,'tier')), season:num(get(r,'season')), games:num(get(r,'games')),
+      perf:num(get(r,'perf')), stat:num(get(r,'stat')), birth:num(get(r,'birth')), note:get(r,'note'), line};
+    o.ex={}; EXTRA.forEach(k=>{ o.ex[k]= xi[k]>=0 ? num((r[xi[k]]||'').trim()) : NaN; });
+    o.honours = hi>=0 ? (r[hi]||'').trim() : '';
+    o.current = ci>=0 ? num((r[ci]||'').trim()) : NaN;
+    const bad=[];
+    if(!o.athlete) bad.push('athlete is blank');
+    if(!o.sport) bad.push('sport is blank');
+    if(isNaN(o.season)) bad.push('season is not a number');
+    if(!(Number.isInteger(o.tier) && o.tier>=1 && o.tier<=6)) bad.push('tier must be a whole number from 1 to 6');
+    if(isNaN(o.games) || o.games<=0) bad.push('games must be above 0');
+    if(isNaN(o.perf) && isNaN(o.stat)) bad.push('needs perf or stat');
+    if(bad.length) errors.push('Row '+line+' skipped: '+bad.join(', '));
+    else rows.push(o);
+  });
+  return {rows,errors};
+}
+
+function derivePerf(rows){
+  const groups={};
+  rows.forEach(r=>{
+    if(!isNaN(r.perf)){ r.perfUsed=Math.min(100,Math.max(0,r.perf)); r.derived=false; }
+    else { const k=[r.sport,r.position,r.competition,r.season].join('|'); (groups[k]=groups[k]||[]).push(r); }
+  });
+  Object.values(groups).forEach(g=>{
+    g.forEach(r=>{
+      let less=0, eq=0;
+      g.forEach(o=>{ if(o.stat<r.stat) less++; else if(o.stat===r.stat) eq++; });
+      r.perfUsed=(less+0.5*eq)/g.length*100; r.derived=true; r.groupN=g.length;
+    });
+  });
+  return rows;
+}
+
+function computeIndex(rows, s){
+  const byA={};
+  rows.forEach(r=>{ const k=r.athlete+'|'+r.sport; (byA[k]=byA[k]||[]).push(r); });
+  const cur=s.curSeason, out=[];
+  Object.keys(byA).forEach(key=>{
+    const list=byA[key].slice().sort((a,b)=>a.season-b.season);
+    const seasons=list.map(r=>{
+      const factor=s.tierFactor[r.tier];
+      const adj=r.perfUsed*factor;
+      const age=Math.max(0,cur-r.season);
+      const wF=Math.pow(0.5,age/s.formHL)*r.games;
+      const tC=Math.pow(0.5,age/s.careerHL);
+      const wC=tC*r.games;
+      return Object.assign({}, r, {factor, adj, wF, wC, tC});
+    });
+    const sumF=seasons.reduce((a,x)=>a+x.wF,0), sumC=seasons.reduce((a,x)=>a+x.wC,0);
+    seasons.forEach(x=>{ x.shareF=sumF>0?x.wF/sumF:0; x.shareC=sumC>0?x.wC/sumC:0; });
+    /* Weighted average of level-adjusted scores, then pulled toward the average
+       athlete in proportion to how little evidence (recency-weighted games) there is. */
+    const agg=(key,sum)=>{
+      const avg=seasons.reduce((a,x)=>a+x[key]*x.adj,0)/sum;
+      const prior=s.priorPerf*(seasons.reduce((a,x)=>a+x[key]*x.factor,0)/sum);
+      return (sum*avg+s.priorGames*prior)/(sum+s.priorGames);
+    };
+    const latest=seasons[seasons.length-1];
+    const active=(cur-latest.season)<=1;
+    const qual=seasons.filter(x=>x.games>=10); const bestPool=(qual.length?qual:seasons).slice().sort((a,b)=>b.adj-a.adj).slice(0,3);
+    const pad=s.priorPerf*(seasons.reduce((a,x)=>a+x.factor,0)/seasons.length);
+    const best3=(bestPool.reduce((a,x)=>a+x.adj,0)+(3-bestPool.length)*pad)/3;
+    const career=0.5*best3+0.5*agg('wC',sumC);
+    const form=active ? agg('wF',sumF) : null;
+    const base=form!==null ? s.blend*form+(1-s.blend)*career : career;
+    const nT=seasons.reduce((a,x)=>a+((x.ex&&x.ex.titles>0)?x.ex.titles:0),0), nA=seasons.reduce((a,x)=>a+((x.ex&&x.ex.awards>0)?x.ex.awards:0),0);
+    const bonus=0;
+    const headline=base;   /* honours are already inside each season's rating */
+    const evidence=sumC;
+    const confidence=evidence/(evidence+s.priorGames);
+    const confLabel=confidence>=0.7?'High':(confidence>=0.45?'Medium':'Low');
+    const birth=seasons.map(x=>x.birth).find(b=>!isNaN(b));
+    let projection=null;
+    if(birth!==undefined){
+      const age=Math.floor(cur)-birth;
+      projection=headline+(age<=s.youthAge?(s.youthAge-age+1)*s.youthBonus:0);
+    }
+    const peak=Math.max.apply(null,seasons.map(x=>x.adj));
+    const st={}; EXTRA.forEach(k=>{ let t=0,n=0; seasons.forEach(x=>{ const v=x.ex&&x.ex[k]; if(v!==undefined&&!isNaN(v)){ t+=v; n++; } }); st[k]=n?t:null; });
+    out.push({key, st, bonus, nT, nA, base, club:latest.note||'', athlete:latest.athlete, sport:latest.sport, position:latest.position, tier:latest.tier,
+      competition:latest.competition, latestSeason:latest.season, active, form, career, headline, projection,
+      peak, confidence, confLabel, seasons});
+  });
+  return out;
+}
+/* ENGINE END */
+
+/* ---------- UI ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = v => (v===null||v===undefined||isNaN(v)) ? null : v.toFixed(1);
+const numOr = (v,def,min,max) => { const n=parseFloat(v); if(isNaN(n)) return def; return Math.min(max===undefined?Infinity:max, Math.max(min===undefined?-Infinity:min, n)); };
+
+const state={rows:[], errors:[], result:[], expanded:new Set(), shown:[], view:'season', limit:300};
+
+function buildTierInputs(){
+  let h='';
+  for(let t=1;t<=6;t++){
+    h+='<div><label for="tf'+t+'">Tier '+t+'</label><input id="tf'+t+'" type="number" min="0" max="1" step="0.05" value="'+DEFAULTS.tierFactor[t]+'"></div>';
+  }
+  $('tfwrap').innerHTML=h;
+}
+
+function readSettings(){
+  const tf={};
+  for(let t=1;t<=6;t++) tf[t]=numOr($('tf'+t).value, DEFAULTS.tierFactor[t], 0, 1);
+  return {
+    curSeason:numOr($('curSeason').value, DEFAULTS.curSeason),
+    formHL:numOr($('formHL').value, DEFAULTS.formHL, 0.1),
+    careerHL:numOr($('careerHL').value, DEFAULTS.careerHL, 0.5),
+    priorGames:numOr($('priorGames').value, DEFAULTS.priorGames, 1),
+    blend:numOr($('blend').value, 60, 0, 100)/100,
+    priorPerf:DEFAULTS.priorPerf, youthAge:DEFAULTS.youthAge, youthBonus:DEFAULTS.youthBonus,
+    tierFactor:tf
+  };
+}
+
+function importData(){
+  state.limit=300;
+  const table=parseDelimited($('csv').value);
+  const res=toRecords(table);
+  derivePerf(res.rows);
+  state.rows=res.rows; state.errors=res.errors; state.expanded=new Set();
+  state.byKey={}; res.rows.forEach(r=>{ const k=r.athlete+'|'+r.sport; (state.byKey[k]=state.byKey[k]||[]).push(r); });
+  Object.keys(state.byKey).forEach(k=>state.byKey[k].sort((a,b)=>a.season-b.season));
+  if(res.rows.length){
+    const maxSeason=Math.max.apply(null,res.rows.map(r=>r.season));
+    $('curSeason').value=maxSeason;
+  }
+  update();
+}
+
+function viewRows(s){
+  const rows=state.rows; if(!rows.length) return rows;
+  const maxS=Math.max.apply(null,rows.map(r=>r.season));
+  const k=r=>r.athlete+'|'+r.sport, isCur=r=>r.season===maxS && r.current!==0;
+  s.curSeason=maxS;
+  if(state.view==='season'){ s.blend=1; s.priorGames=3; return rows.filter(isCur); }
+  if(state.view==='current'){ const keep=new Set(rows.filter(isCur).map(k)); return rows.filter(r=>keep.has(k(r))); }
+  s.blend=0; s.careerHL=500; return rows;
+}
+const VIEW_NOTES={
+  season:'Ranks players on this season only. Click a player for stats and honours. Scores are held back toward average until a player has played a few games, so early-season rankings are provisional.',
+  current:'Only players in a current squad, ranked on Form (recent seasons) and Career (all seasons) together. Click a player for career stats and honours.',
+  alltime:'Every player in the data who has played a minute in the Premier League, ranked on their whole career with no recency weighting, including retired players. Each season counts output, impact, team success, honours and availability; career is half best three seasons, half average.',
+};
+function update(){
+  const s=readSettings();
+  $('blendF').textContent='Form '+Math.round(s.blend*100)+'%';
+  $('blendC').textContent='Career '+Math.round((1-s.blend)*100)+'%';
+  state.result=state.rows.length?computeIndex(viewRows(s),s):[];
+  const sel=$('sportSel'), keep=sel.value;
+  const sports=[...new Set(state.rows.map(r=>r.sport))].sort();
+  sel.innerHTML='<option value="">All sports</option>'+sports.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+  sel.value=sports.includes(keep)?keep:'';
+  document.querySelectorAll('.views button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===state.view)));
+  $('viewNote').textContent=VIEW_NOTES[state.view];
+  renderStatus(sports);
+  renderBoard();
+}
+
+function renderStatus(sports){
+  const n=state.rows.length, a=state.result.length, derived=state.rows.filter(r=>r.derived).length;
+  $('status').innerHTML = n
+    ? '<b>'+n+'</b> season rows, <b>'+a+'</b> athletes, <b>'+sports.length+'</b> sport'+(sports.length===1?'':'s')+(derived?'. <b>'+derived+'</b> perf scores were worked out from stat.':'.')
+    : 'No data loaded yet. Load the sample data or paste your own.';
+  $('errs').innerHTML=state.errors.slice(0,40).map(e=>'<li>'+esc(e)+'</li>').join('');
+}
+
+function scoreCell(v,cls){
+  const f=fmt(v);
+  if(f===null) return '<td class="num small">n/a</td>';
+  return '<td class="num"><div class="sc '+cls+'" style="--w:'+Math.max(0,Math.min(100,v))+'%"><b>'+f+'</b><i></i></div></td>';
+}
+
+const STATCOLS=[['apps','Apps'],['minutes','Mins'],['goals','Goals'],['assists','Assists'],['xg','xG'],['xa','xA'],['cs','CS'],['saves','Saves'],['yc','YC'],['rc','RC'],['bonus','Bonus']];
+function stCell(r,k){
+  const v=r.st[k];
+  if(v===null||v===undefined) return '<td class="st small">–</td>';
+  return '<td class="st">'+((k==='xg'||k==='xa')?v.toFixed(1):Math.round(v).toLocaleString())+'</td>';
+}
+function columns(){
+  const v=state.view, c=[['rank','#'],['name','Athlete']];
+  if(v==='current'){ c.push(['form','Form'],['career','Career']); }
+  c.push(['head','AthScore']);
+  c.push(['conf','Confidence']);
+  if(v!=='season') c.push(['last','Last']);
+  return c;
+}
+function renderBoard(){
+  const metric=$('sortSel').value, q=$('search').value.trim().toLowerCase(), sp=$('sportSel').value;
+  const minC=parseFloat($('minConf').value), incl=$('inclInactive').checked || state.view==='alltime';
+  const val=(r)=> metric.indexOf('st_')===0 ? r.st[metric.slice(3)] : (metric==='headline'?r.headline:r[metric]);
+  const cmp=(a,b)=>{
+    const av=val(a), bv=val(b);
+    if((av===null||av===undefined)&&(bv===null||bv===undefined)) return a.athlete.localeCompare(b.athlete);
+    if(av===null||av===undefined) return 1; if(bv===null||bv===undefined) return -1;
+    return bv-av || (b.headline-a.headline);
+  };
+  // rank is fixed by the other filters, so searching for a name never changes it
+  const pool=state.result.filter(r=>(incl||r.active) && (!sp||r.sport===sp) && r.confidence>=minC).sort(cmp);
+  const rankOf=new Map(); pool.forEach((r,i)=>rankOf.set(r.key,i+1));
+  // movement since the previous round (season view only): same rating formula run on gameweeks 1..N-1
+  const mv=new Map();
+  if(state.view==='season'){
+    const st=readSettings(), pg=3, prior=st.priorPerf;
+    const prevHead=r=>{ const x=r.seasons[r.seasons.length-1], e=x.ex||{}; const g=e.prev_games, p=e.prev_perf;
+      if(g===undefined||isNaN(g)||isNaN(p)||g<=0) return null; return (g*p*x.factor+pg*prior*x.factor)/(g+pg); };
+    const pp=pool.map(r=>({r,h:prevHead(r)})).filter(o=>o.h!==null).sort((a,b)=>b.h-a.h);
+    const prevRank=new Map(); pp.forEach((o,i)=>prevRank.set(o.r.key,i+1));
+    pool.forEach(r=>{ const pr=prevRank.get(r.key), nr=rankOf.get(r.key); 
+      mv.set(r.key, pr===undefined?{isNew:true}:{d:pr-nr, pr, dh:r.headline-(pp[pr-1].h)}); });
+  }
+  state.moves=mv;
+  const list=pool.filter(r=>!q||r.athlete.toLowerCase().includes(q));
+  list.forEach(r=>{ r.rankNo=rankOf.get(r.key); });
+  state.shown=list;
+  const cols=columns();
+  $('headrow').innerHTML=cols.map(c=>'<th'+(c[0].indexOf('st:')===0?' class="st"':'')+'>'+c[1]+'</th>').join('');
+  if(!list.length){
+    $('tbody').innerHTML='<tr><td colspan="'+cols.length+'" class="empty">'+(state.rows.length?'No athletes match these filters.':'Load the sample data to see the ranking.')+'</td></tr>';
+    $('exportBox').value=''; return;
+  }
+  let html='';
+  const shown=list.slice(0,state.limit);
+  shown.forEach(r=>{
+    const open=state.expanded.has(r.key);
+    const confCol=r.confLabel==='High'?'var(--form)':(r.confLabel==='Medium'?'var(--accent)':'var(--bad)');
+    html+='<tr class="row" data-key="'+esc(r.key)+'" tabindex="0" aria-expanded="'+open+'">'
+      +'<td class="rank">'+rankOf.get(r.key)+(()=>{const m=mv.get(r.key); if(!m) return ''; if(m.isNew) return '<small class="mv-new">new</small>'; return m.d>0?'<small class="mv-up">&#9650;'+m.d+'</small>':(m.d<0?'<small class="mv-dn">&#9660;'+(-m.d)+'</small>':'<small class="mv-new">&ndash;</small>');})()+'</td>'
+      +'<td><div class="name">'+esc(r.athlete)+'</div><div class="small">'+esc(r.position)+' · '+esc(r.club||r.competition)+(r.nT?' · '+r.nT+' title'+(r.nT>1?'s':''):'')+(r.nA?' · '+r.nA+' award'+(r.nA>1?'s':''):'')+(r.active?'':' <span class="pill off">Inactive</span>')+'</div></td>'
+      +(state.view==='current'?scoreCell(r.form,'form')+scoreCell(r.career,'career'):'')
+      +scoreCell(r.headline,'head')
+      +'<td class="conf"><span style="color:'+confCol+'">'+r.confLabel+'</span><i style="--w:'+Math.round(r.confidence*100)+'%;--c:'+confCol+'"></i></td>'
+      +(state.view!=='season'?'<td class="num small">'+esc(r.latestSeason)+'</td>':'')+'</tr>';
+    if(open) html+=detailRow(r,cols.length);
+  });
+  if(list.length>shown.length) html+='<tr class="more"><td colspan="'+cols.length+'"><button type="button" id="btnMore">Show 300 more ('+(list.length-shown.length).toLocaleString()+' left)</button></td></tr>';
+  $('tbody').innerHTML=html;
+  (function(){
+    const box=$('movers'); if(state.view!=='season'||!mv.size){ box.innerHTML=''; return; }
+    const arr=[]; mv.forEach((m,k)=>{ if(!m.isNew && m.d!==0 && Math.min(m.pr,rankOf.get(k))<=100){ const r=state.result.find(x=>x.key===k); arr.push({r,m}); } });
+    const li=o=>'<li>'+esc(o.r.athlete)+' <span class="small">('+esc(o.r.club||'')+')</span> '+(o.m.d>0?'<b class="mv-up">&#9650;'+o.m.d+'</b>':'<b class="mv-dn">&#9660;'+(-o.m.d)+'</b>')+' <span class="small">#'+o.m.pr+' to #'+rankOf.get(o.r.key)+', rating '+(o.m.dh>=0?'+':'')+o.m.dh.toFixed(1)+'</span></li>';
+    const up=arr.slice().sort((a,b)=>b.m.d-a.m.d).slice(0,5), dn=arr.slice().sort((a,b)=>a.m.d-b.m.d).slice(0,5);
+    box.innerHTML='<details open><summary><b>Biggest movers this round</b> <span class="small">(vs the previous gameweek, top 100 only)</span></summary><div class="mvgrid"><div><h3>Risers</h3><ul>'+up.map(li).join('')+'</ul></div><div><h3>Fallers</h3><ul>'+dn.map(li).join('')+'</ul></div></div></details>';
+  })();
+  $('exportBox').value=buildCsv(list);
+}
+
+const SEAS=y=>(y-1)+'-'+String(y).slice(2);
+function detailRow(r,ncols){
+  const rows=(state.byKey&&state.byKey[r.key])||[];
+  const n=v=>(v===undefined||v===null||isNaN(v))?'–':Math.round(v).toLocaleString();
+  const n1=v=>(v===undefined||v===null||isNaN(v))?'–':v.toFixed(1);
+  const sum=k=>{ let t=0,c=0; rows.forEach(x=>{ const v=x.ex&&x.ex[k]; if(v!==undefined&&!isNaN(v)){ t+=v; c++; } }); return c?t:null; };
+  const first=rows.length?rows[0].season:null, last=rows.length?rows[rows.length-1].season:null;
+  const share={}; r.seasons.forEach(x=>{ share[x.season]=x; });
+  const tiles=[['Apps',n(sum('apps'))],['Minutes',n(sum('minutes'))],['Goals',n(sum('goals'))],['Assists',n(sum('assists'))],['xG',n1(sum('xg'))],['xA',n1(sum('xa'))],
+    ['Clean sheets',n(sum('cs'))],['Saves',n(sum('saves'))],['Yellows',n(sum('yc'))],['Reds',n(sum('rc'))],['Bonus pts',n(sum('bonus'))],['Titles',n(sum('titles'))],['Awards',n(sum('awards'))]];
+  let h='<tr class="detail"><td></td><td colspan="'+(ncols-1)+'">'
+    +'<p class="notes" style="margin:0 0 8px"><b>'+(first?SEAS(first)+' to '+SEAS(last):'')+'</b>'+(rows.length?' · '+rows.length+' Premier League season'+(rows.length>1?'s':''):'')
+    +(state.view==='season'?'. Ranked on '+SEAS(last)+' only; these stats cover every season below.':'. Stats cover every season below.')+'</p>'
+    +'<div class="stgrid">'+tiles.map(t=>'<div><b>'+t[1]+'</b><span>'+t[0]+'</span></div>').join('')+'</div>'
+    +'<table class="dt"><thead><tr><th>Season</th><th>Club</th><th>Apps</th><th>Mins</th><th>Goals</th><th>Assists</th><th>xG</th><th>xA</th><th>CS</th><th>Saves</th><th>YC</th><th>RC</th><th>Rating</th><th>Output</th><th>Impact</th><th>Credit</th><th>Avail.</th><th>Honours</th><th>Form wt</th><th>Career wt</th></tr></thead><tbody>';
+  rows.slice().reverse().forEach(x=>{
+    const e=x.ex||{}, s=share[x.season];
+    h+='<tr><td class="num">'+SEAS(x.season)+'</td><td class="small">'+esc(x.note||'')+'</td>'
+      +'<td class="num">'+n(e.apps)+'</td><td class="num">'+n(e.minutes)+'</td><td class="num">'+n(e.goals)+'</td><td class="num">'+n(e.assists)+'</td>'
+      +'<td class="num">'+n1(e.xg)+'</td><td class="num">'+n1(e.xa)+'</td><td class="num">'+n(e.cs)+'</td><td class="num">'+n(e.saves)+'</td><td class="num">'+n(e.yc)+'</td><td class="num">'+n(e.rc)+'</td>'
+      +'<td class="num">'+(isNaN(x.perfUsed)?'–':x.perfUsed.toFixed(1))+'</td><td class="num">'+n(e.out)+'</td><td class="num">'+n(e.imp)+'</td><td class="num">'+n(e.cred)+'</td><td class="num">'+n(e.avail)+'</td><td class="small">'+esc(x.honours||'')+'</td>'
+      +'<td class="num">'+(s?Math.round(s.shareF*100)+'%':'–')+'</td><td class="num">'+(s?Math.round(s.shareC*100)+'%':'–')+'</td></tr>';
+  });
+  h+='</tbody></table><p class="notes">AthScore <b>'+r.headline.toFixed(1)+'</b> (best single season <b>'+r.peak.toFixed(1)+'</b>; '+r.nT+' league title'+(r.nT===1?'':'s')+', '+r.nA+' other honour'+(r.nA===1?'':'s')+'). Each season is rated 35% Output (goals, assists and chance quality against peers in the same position, measured in standard deviations), 20% Impact (share of the team\'s goals, or clean sheets for defenders and keepers), 20% Credit (the team\'s points per game that year, scaled by how much he played), 15% Honours (titles, cups, European trophies, Golden Boot, Golden Glove and player of the year awards, capped) and 10% Availability and discipline. Career is half the best three seasons and half the games-weighted average. xG, xA, saves and bonus points exist from 2016-17 only; earlier seasons use goals, assists, starts, clean sheets and discipline. Cup and European credit goes to squad regulars as a proxy because the free data has no cup appearances.</p></td></tr>';
+  return h;
+}
+
+function buildCsv(list){
+  const q=v=>{ v=String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
+  const f=v=>fmt(v)===null?'':fmt(v);
+  const lines=['rank,athlete,position,club,form,career,athscore,titles,awards,apps,minutes,goals,assists,confidence,last_season'];
+  list.forEach(r=>lines.push([r.rankNo,q(r.athlete),q(r.position),q(r.club),f(r.form),f(r.career),f(r.headline),r.nT,r.nA,r.st.apps??'',r.st.minutes??'',r.st.goals??'',r.st.assists??'',r.confLabel,r.latestSeason].join(',')));
+  return lines.join('\n');
+}
+
+function toggleRow(tr){
+  const key=tr.getAttribute('data-key');
+  if(state.expanded.has(key)) state.expanded.delete(key); else state.expanded.add(key);
+  renderBoard();
+}
+
+async function copyText(text,msgEl,okMsg,box){
+  try{ await navigator.clipboard.writeText(text); msgEl.textContent=okMsg; }
+  catch(e){ box.focus(); box.select(); msgEl.textContent='Copy blocked here. The text is selected, so press Ctrl+C or Cmd+C.'; }
+  setTimeout(()=>{msgEl.textContent='';},4000);
+}
+
+function wire(){
+  buildTierInputs();
+  $('btnImport').addEventListener('click',importData);
+  $('btnSample').addEventListener('click',()=>{ $('csv').value=SAMPLE_CSV; importData(); });
+  $('btnSoccer').addEventListener('click',()=>{ $('csv').value=SOCCER_CSV; importData(); });
+  $('btnPL').addEventListener('click',()=>{ $('csv').value=PLAYERS_CSV; importData(); });
+  $('btnReal').addEventListener('click',()=>{ $('csv').value=REAL_CSV; importData(); });
+  $('btnClear').addEventListener('click',()=>{ $('csv').value=''; importData(); });
+  $('btnTemplate').addEventListener('click',()=>{
+    const t='athlete,sport,position,competition,tier,season,games,perf,stat,birth_year\n';
+    $('csv').value=t; copyText(t,$('status'),'Template header copied. Add one row per athlete per season.',$('csv'));
+  });
+  $('file').addEventListener('change',e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const rd=new FileReader(); rd.onload=()=>{ $('csv').value=rd.result; importData(); }; rd.readAsText(f);
+    e.target.value='';
+  });
+  ['curSeason','formHL','careerHL','priorGames','blend'].forEach(id=>$(id).addEventListener('input',update));
+  for(let t=1;t<=6;t++) $('tf'+t).addEventListener('input',update);
+  ['search','sportSel','sortSel','minConf','inclInactive'].forEach(id=>$(id).addEventListener('input',()=>{ state.limit=300; renderBoard(); }));
+  document.querySelectorAll('.views button').forEach(b=>b.addEventListener('click',()=>{ state.view=b.dataset.view; state.limit=300; state.expanded=new Set(); update(); }));
+  $('tbody').addEventListener('click',e=>{ if(e.target.id==='btnMore'){ state.limit+=300; renderBoard(); return; } const tr=e.target.closest('tr.row'); if(tr) toggleRow(tr); });
+  $('tbody').addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.matches('tr.row')){ e.preventDefault(); toggleRow(e.target); } });
+  $('btnCopyRank').addEventListener('click',()=>copyText($('exportBox').value,$('copyMsg'),'Ranking copied.',$('exportBox')));
+  $('csv').value=PLAYERS_CSV;
+  importData();
+}
+wire();
+</script>
+</body>
+</html>
