@@ -31,10 +31,6 @@ jobs:
         continue-on-error: true      # if Understat is down the page still publishes with the leagues it has, and says what is missing
         run: |
           python build_top5.py
-      - name: Build the Legends layer (pre-2005 careers) from Wikidata
-        timeout-minutes: 50
-        continue-on-error: true
-        run: python build_legends.py
       - name: Build the page
         run: python inject.py
       - name: Save the round snapshot
