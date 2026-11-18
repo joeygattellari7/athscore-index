@@ -762,8 +762,9 @@ function viewRows(s){
   s.blend=0; s.careerHL=500; return rows;
 }
 function viewNote(){
-  const L=state.league, pl=L==='Premier League', from=pl?'1992-93':'2014-15';
-  const cov=pl?'':' Data for '+L+' starts in 2014-15 (the first season with open per-player data), so All time here covers 2014-15 onward. Defenders and keepers are rated more on team defence than individual stats, because the free data has no tackles, saves or clean sheets.';
+  const L=state.league, pl=L==='Premier League', from=pl?'1992-93':'2005-06';
+  if(L==='Legends') return 'Notable players whose careers began before the per-player stats start (about 2005), from Wikidata, across every league and country. Each club spell is spread evenly over its years from career totals (appearances and goals), so these ratings are rougher than the stats-based leagues and carry lower confidence. Only forwards and midfielders with recorded goals are included, and clubs without a league listed are skipped.';
+  const cov=pl?'':' Data for '+L+' starts around 2005-06 (the first season with open per-player data), so All time here covers 2014-15 onward. Defenders and keepers are rated more on team defence than individual stats, because the free data has no tackles, saves or clean sheets.';
   const N={
     season:'Ranks '+L+' players on this season only. Click a player for stats and honours. Scores are held back toward average until a player has played a few games, so early-season rankings are provisional.',
     current:'Players who have played in '+L+' this season, ranked on Form (recent seasons) and Career (all seasons in '+L+') together. Click a player for career stats and honours.'+cov,
@@ -992,7 +993,7 @@ function wire(){
   const lb=$('leagues');
   Object.keys(PLAYERS_BY_LEAGUE).forEach(L=>{ const b=document.createElement('button'); b.type='button'; b.textContent=L; b.dataset.league=L; b.setAttribute('aria-pressed',String(L===state.league)); lb.appendChild(b); });
   const slugOf=L=>L.toLowerCase().replace(/\s+/g,'-');
-  const setLeague=L=>{ if(!PLAYERS_BY_LEAGUE[L]) return; state.league=L; state.limit=300; $('search').value=''; $('csv').value=PLAYERS_BY_LEAGUE[L];
+  const setLeague=L=>{ if(!PLAYERS_BY_LEAGUE[L]) return; state.league=L; if(L==='Legends') state.view='alltime'; document.querySelectorAll('.views button').forEach(b=>{ b.disabled=(L==='Legends'&&b.dataset.view!=='alltime'); }); state.limit=300; $('search').value=''; $('csv').value=PLAYERS_BY_LEAGUE[L];
     lb.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.league===L)));
     try{ history.replaceState(null,'','#'+slugOf(L)); }catch(e){}
     importData(); };

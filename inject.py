@@ -41,9 +41,19 @@ if os.path.exists("top5_players.csv"):
         problems.append(f"{name}: {type(e).__name__} {str(e)[:80]}"); data.pop(name,None); info.pop(name,None)
 else:
     problems.append("top5_players.csv missing")
+try:
+    if os.path.exists("legends_players.csv"):
+        lrows=list(csv.DictReader(open("legends_players.csv",encoding="utf-8")))
+        if len(lrows)>300:
+            data["Legends"]=chunk(open("legends_players.csv",encoding="utf-8").read().splitlines())
+            info["Legends"]={"round":0,"rows":len(lrows),"current_rows":0}
+        else: problems.append(f"Legends: only {len(lrows)} rows")
+    else: problems.append("Legends: not built yet")
+except Exception as e:
+    problems.append(f"Legends: {type(e).__name__} {str(e)[:80]}"); data.pop("Legends",None); info.pop("Legends",None)
 json.dump({"updated":today,"latest_gw":gw,"rows":len(rows),"current_rows":len(cur),"leagues":info,"problems":problems},open("status.json","w"))
 os.makedirs("site",exist_ok=True)
-lines=" | ".join(f"{k}: round {v['round']}" for k,v in info.items())
+lines=" | ".join(f"{k}: round {v['round']}" for k,v in info.items() if k!="Legends")
 asof=f"Data through {lines}. Updated {today} (UTC). Rebuilt automatically every few hours."+(" Not available right now: "+"; ".join(problems) if problems else "")
 leaguejs="{"+",".join(json.dumps(k)+":`"+v+"`" for k,v in data.items())+"}"
 html=open("template.html",encoding="utf-8").read().replace("__LEAGUE_DATA__",leaguejs).replace("__LEAGUE_INFO__",json.dumps(info)).replace("__ASOF__",asof)
