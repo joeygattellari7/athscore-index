@@ -10,7 +10,10 @@ gw=max(gws) if gws else 0
 today=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 
 def chunk(lines):
-    txt="\n".join(lines).strip("\n"); assert "`" not in txt and "${" not in txt and "</script" not in txt.lower(); return txt
+    """Escape the text so it is safe inside a JavaScript template literal inside the page."""
+    txt="\n".join(lines).strip("\n")
+    txt=txt.replace("\\","\\\\").replace("`","\\`").replace("${","\\${").replace("</script","<\\/script").replace("</SCRIPT","<\\/SCRIPT")
+    return txt
 hdr=open("pl_players.csv",encoding="utf-8").readline().rstrip("\n")
 data={"Premier League":chunk(open("pl_players.csv",encoding="utf-8").read().splitlines())}
 info={"Premier League":{"round":gw,"rows":len(rows),"current_rows":len(cur)}}
@@ -22,6 +25,7 @@ if os.path.exists("top5_players.csv"):
     raw=open("top5_players.csv",encoding="utf-8").read().splitlines()[1:]
     import io
     for name in ("La Liga","Serie A","Bundesliga","Ligue 1"):
+      try:
         rs=by.get(name,[]); c=[r for r in rs if r["season"]=="2027"]
         if len(rs)<3000 or len(c)<150:
             problems.append(f"{name}: only {len(rs)} rows, {len(c)} current"); continue
@@ -33,6 +37,8 @@ if os.path.exists("top5_players.csv"):
             m=re.fullmatch(r"top5_"+re.escape(CODES[name])+r"_r(\d+)\.csv",fn)
             if m: rnd=max(rnd,int(m.group(1)))
         info[name]={"round":rnd,"rows":len(rs),"current_rows":len(c)}
+      except Exception as e:
+        problems.append(f"{name}: {type(e).__name__} {str(e)[:80]}"); data.pop(name,None); info.pop(name,None)
 else:
     problems.append("top5_players.csv missing")
 json.dump({"updated":today,"latest_gw":gw,"rows":len(rows),"current_rows":len(cur),"leagues":info,"problems":problems},open("status.json","w"))
