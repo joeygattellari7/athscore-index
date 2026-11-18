@@ -29,7 +29,9 @@ jobs:
       - name: Build La Liga, Serie A, Bundesliga and Ligue 1 from ESPN
         timeout-minutes: 55
         continue-on-error: true      # if Understat is down the page still publishes with the leagues it has, and says what is missing
-        run: python build_top5.py
+        run: |
+          PROBE_HISTORY=1 python build_top5.py
+          python build_top5.py
       - name: Build the page
         run: python inject.py
       - name: Save the round snapshot
@@ -37,7 +39,7 @@ jobs:
           git config user.name "athscore-bot"
           git config user.email "athscore-bot@users.noreply.github.com"
           git add state status.json
-          git add top5_status.json || true
+          git add top5_status.json top5_debug.json || git add top5_status.json || true
           git diff --cached --quiet || (git commit -m "Snapshot after latest round" && git push)
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }

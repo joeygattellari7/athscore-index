@@ -251,7 +251,33 @@ def prev_snapshot(code, rnd):
     return {r["athlete"]: (float(r["perf"]), float(r["games"])) for r in csv.DictReader(open(f"state/top5_{code}_r{best}.csv", encoding="utf-8"))}
 
 
+def probe_history():
+    """One-off probe: which historical sources can the runner read? Result goes to top5_debug.json."""
+    out = {}
+    tests = {"rsssf_pele": "https://www.rsssf.org/players/ppeledata.html",
+             "rsssf_index": "https://www.rsssf.org/players/",
+             "11v11_pele": "https://www.11v11.com/players/0-21426/",
+             "11v11_robots": "https://www.11v11.com/robots.txt",
+             "wikipedia_api": "https://en.wikipedia.org/w/api.php?action=query&titles=1963_Santos_FC_season&prop=extracts&format=json&explaintext=1",
+             "wikidata_sparql": "https://query.wikidata.org/sparql?format=json&query=" + urllib.request.quote("SELECT ?t ?m ?g WHERE { wd:Q12897 p:P54 ?s . ?s ps:P54 ?t . OPTIONAL{?s pq:P1350 ?m} OPTIONAL{?s pq:P1351 ?g} } LIMIT 10"),
+             "openfootball_it": "https://raw.githubusercontent.com/openfootball/italy/master/README.md",
+             "fjelstul_eng": "https://raw.githubusercontent.com/jfjelstul/englishfootball/master/data-csv/standings.csv",
+             "statsbomb_comps": "https://raw.githubusercontent.com/statsbomb/open-data/master/data/competitions.json"}
+    for name, url in tests.items():
+        try:
+            r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=45)
+            txt = r.read().decode("utf-8", "replace")
+            out[name] = {"status": r.status, "len": len(txt), "head": re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))[:350]}
+        except urllib.error.HTTPError as e:
+            out[name] = {"status": e.code}
+        except Exception as e:
+            out[name] = {"error": str(e)[:120]}
+    json.dump(out, open("top5_debug.json", "w"), indent=1)
+
+
 def main():
+    if os.environ.get("PROBE_HISTORY"):
+        probe_history(); return
     hdr = "athlete,sport,position,competition,tier,season,games,perf,stat,birth_year,note,apps,minutes,goals,assists,xg,xa,cs,saves,yc,rc,bonus,titles,awards,honours,team_ppg,team_z,current,out,imp,cred,avail,hon,honpts,prev_perf,prev_games".split(",")
     cur_se = CURRENT_YEAR + 1
     status = {}
