@@ -15,6 +15,7 @@ hdr=open("pl_players.csv",encoding="utf-8").readline().rstrip("\n")
 data={"Premier League":chunk(open("pl_players.csv",encoding="utf-8").read().splitlines())}
 info={"Premier League":{"round":gw,"rows":len(rows),"current_rows":len(cur)}}
 problems=[]
+CODES={"La Liga":"esp.1","Serie A":"ita.1","Bundesliga":"ger.1","Ligue 1":"fra.1"}
 if os.path.exists("top5_players.csv"):
     by={}
     for r in csv.DictReader(open("top5_players.csv",encoding="utf-8")): by.setdefault(r["competition"],[]).append(r)
@@ -29,7 +30,7 @@ if os.path.exists("top5_players.csv"):
         data[name]=chunk(buf.getvalue().splitlines())
         rnd=0
         for fn in os.listdir("state"):
-            m=re.fullmatch(r"top5_"+name.replace(" ","_").replace("La_Liga","La_liga")+r"_r(\d+)\.csv",fn)
+            m=re.fullmatch(r"top5_"+re.escape(CODES[name])+r"_r(\d+)\.csv",fn)
             if m: rnd=max(rnd,int(m.group(1)))
         info[name]={"round":rnd,"rows":len(rs),"current_rows":len(c)}
 else:

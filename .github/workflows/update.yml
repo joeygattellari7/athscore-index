@@ -26,7 +26,8 @@ jobs:
       - run: pip install pandas pyreadr
       - name: Build ratings from the live Fantasy Premier League feed
         run: FPL_LIVE=1 python build_pl_index.py
-      - name: Build La Liga, Serie A, Bundesliga and Ligue 1 from Understat
+      - name: Build La Liga, Serie A, Bundesliga and Ligue 1 from ESPN
+        timeout-minutes: 55
         continue-on-error: true      # if Understat is down the page still publishes with the leagues it has, and says what is missing
         run: python build_top5.py
       - name: Build the page
