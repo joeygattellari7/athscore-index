@@ -47,6 +47,8 @@ def live_fetch(slug, year):
     err = None
     try:
         html = http(f"https://understat.com/league/{slug}/{year}")
+        if "come back soon" in html.lower():
+            raise RuntimeError("Understat is showing its maintenance page (\"We will come back soon\")")
         players, teams = _json_from_script(html, "playersData"), _json_from_script(html, "teamsData")
         if players and teams:
             return {"players": players, "teams": teams}
@@ -222,23 +224,14 @@ def prev_snapshot(slug, rnd):
 
 
 def diagnose():
-    """Record what the candidate data sources actually return from the GitHub runner, so a failed run can be fixed without guessing."""
+    """Record one Understat response so a failed run says why (maintenance page, block, or a changed layout)."""
     out = {}
-    W = "https://site.web.api.espn.com/apis/common/v3/sports/soccer/%s/statistics/byathlete?region=us&lang=en&contentorigin=espn&isqualified=false&limit=2&sort=general.appearances%%3Adesc&season=%s&seasontype=1"
-    tests = [("by_esp_2025", W % ("esp.1", 2025)), ("by_esp_2016", W % ("esp.1", 2016)), ("by_esp_2005", W % ("esp.1", 2005)),
-             ("by_ita_2020", W % ("ita.1", 2020)), ("by_eng_2020", W % ("eng.1", 2020)),
-             ("core_ath_stats", "https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/types/1/athletes/231388/statistics/0"),
-             ("core_team_ath", "https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/teams/83/athletes?limit=5"),
-             ("stand_2016", "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2016")]
-    for name, url in tests:
-        try:
-            r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60)
-            txt = r.read().decode("utf-8", "replace")
-            out[name] = {"status": r.status, "len": len(txt), "text": txt[:1500] if name != "stand_2016" else re.findall(r'"seasonDisplayName":"[^"]+"', txt)[:2]}
-        except urllib.error.HTTPError as e:
-            out[name] = {"status": e.code}
-        except Exception as e:
-            out[name] = {"error": str(e)[:150]}
+    try:
+        txt = http("https://understat.com/league/La_liga/2025")
+        body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))
+        out["understat"] = {"len": len(txt), "has_data": "playersData" in txt, "text": body[:300]}
+    except Exception as e:
+        out["understat"] = {"error": str(e)[:200]}
     json.dump(out, open("top5_debug.json", "w"), indent=1)
 
 
