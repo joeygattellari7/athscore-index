@@ -222,24 +222,28 @@ def prev_snapshot(slug, rnd):
 
 
 def diagnose():
-    """Record what Understat actually returns, so a failed run can be fixed without guessing."""
+    """Record what the candidate data sources actually return from the GitHub runner, so a failed run can be fixed without guessing."""
     out = {}
-    tests = [("page", "GET", "https://understat.com/league/La_liga/2025", None, {}),
-             ("getLeagueData", "GET", "https://understat.com/getLeagueData/La_liga/2025", None,
-              {"X-Requested-With": "XMLHttpRequest", "Referer": "https://understat.com/league/La_liga/2025"}),
-             ("getPlayersStats", "POST", "https://understat.com/main/getPlayersStats/", b"league=La_liga&season=2025",
-              {"X-Requested-With": "XMLHttpRequest", "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8", "Referer": "https://understat.com/league/La_liga/2025"})]
-    for name, meth, url, body, hd in tests:
+    BR = dict(UA, **{"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Sec-Fetch-Mode": "navigate", "Upgrade-Insecure-Requests": "1"})
+    espn = "https://site.web.api.espn.com/apis/common/v3/sports/soccer/esp.1/statistics/byathlete"
+    tests = [("us_home", "https://understat.com/", BR), ("us_epl2024", "https://understat.com/league/EPL/2024", BR),
+             ("us_laliga2024_browser", "https://understat.com/league/La_liga/2024", BR),
+             ("espn_byathlete", espn + "?region=us&lang=en&contentorigin=espn&season=2025&limit=3&sort=general.appearances%3Adesc", UA),
+             ("espn_standings", "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2025", UA),
+             ("espn_core_leaders", "https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/types/1/leaders", UA),
+             ("fbref", "https://fbref.com/en/comps/12/2024-2025/stats/2024-2025-La-Liga-Stats", BR),
+             ("fotmob", "https://www.fotmob.com/api/leagues?id=87", UA)]
+    for name, url, hd in tests:
         try:
-            req = urllib.request.Request(url, data=body, method=meth, headers=dict(UA, **hd))
-            r = urllib.request.urlopen(req, timeout=60)
+            r = urllib.request.urlopen(urllib.request.Request(url, headers=hd), timeout=60)
             txt = r.read().decode("utf-8", "replace")
-            out[name] = {"status": r.status, "ctype": r.headers.get("Content-Type"), "len": len(txt), "head": txt[:400],
-                         "vars": re.findall(r"var\s+(\w+)\s*=\s*JSON\.parse", txt)[:10], "scripts": re.findall(r'<script[^>]*src="([^"]+)"', txt)[:10]}
+            body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))
+            out[name] = {"status": r.status, "ctype": r.headers.get("Content-Type"), "len": len(txt), "vars": re.findall(r"var\s+(\w+)\s*=\s*JSON\.parse", txt)[:10],
+                         "text": body[:500] if "html" in (r.headers.get("Content-Type") or "") else txt[:700]}
         except urllib.error.HTTPError as e:
-            out[name] = {"status": e.code, "body": e.read().decode("utf-8", "replace")[:300]}
+            out[name] = {"status": e.code}
         except Exception as e:
-            out[name] = {"error": str(e)}
+            out[name] = {"error": str(e)[:150]}
     json.dump(out, open("top5_debug.json", "w"), indent=1)
 
 
