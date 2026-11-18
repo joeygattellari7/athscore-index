@@ -224,14 +224,37 @@ def prev_snapshot(slug, rnd):
 
 
 def diagnose():
-    """Record one Understat response so a failed run says why (maintenance page, block, or a changed layout)."""
+    """Probe ESPN's open endpoints from the runner (stat names, roster shape, season depth)."""
     out = {}
+    def get(u):
+        return json.loads(urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60).read().decode("utf-8", "replace"))
     try:
-        txt = http("https://understat.com/league/La_liga/2025")
-        body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))
-        out["understat"] = {"len": len(txt), "has_data": "playersData" in txt, "text": body[:300]}
+        d = get("https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/2025/types/1/athletes/231388/statistics/0")
+        out["stat_names"] = {c["name"]: {x["name"]: x["value"] for x in c["stats"]} for c in d["splits"]["categories"]}
     except Exception as e:
-        out["understat"] = {"error": str(e)[:200]}
+        out["stat_names"] = str(e)[:200]
+    for name, u in [("roster2025", "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/83/roster?season=2025"),
+                    ("roster2016", "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/teams/83/roster?season=2016")]:
+        try:
+            d = get(u)
+            ath = d.get("athletes") or []
+            first = ath[0] if ath else None
+            if isinstance(first, dict) and "items" in first:
+                first = first["items"][0]
+            out[name] = {"keys": list(d.keys()), "n": len(ath), "first": json.dumps(first)[:600] if first else None}
+        except Exception as e:
+            out[name] = str(e)[:200]
+    for yr in (2010, 2012, 2014, 2016):
+        try:
+            d = get(f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/{yr}/teams/83/athletes?limit=3")
+            out[f"core_roster_{yr}"] = d.get("count")
+            ref = d["items"][0]["$ref"].replace("http://", "https://")
+            a = get(ref)
+            out[f"core_athlete_{yr}"] = {"name": a.get("fullName"), "pos": (a.get("position") or {}).get("abbreviation")}
+            st = get(f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/esp.1/seasons/{yr}/types/1/athletes/{ref.split('/athletes/')[1].split('?')[0]}/statistics/0")
+            out[f"core_stats_{yr}"] = {x["name"]: x["value"] for c in st["splits"]["categories"] for x in c["stats"] if x["name"] in ("appearances", "totalGoals", "goalAssists", "minutes")}
+        except Exception as e:
+            out[f"core_{yr}"] = str(e)[:120]
     json.dump(out, open("top5_debug.json", "w"), indent=1)
 
 
