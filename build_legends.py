@@ -19,79 +19,103 @@ BUDGET = float(os.environ.get("LEGENDS_BUDGET_MIN", "40")) * 60
 T0 = time.time()
 FAILED = []
 
-SPELLS = """SELECT ?p ?pLabel ?birth ?posLabel ?team ?teamLabel ?start ?end ?m ?g ?leagueLabel ?countryLabel WHERE {
-  ?p wdt:P106 wd:Q937857 ; wdt:P569 ?birth ; wikibase:sitelinks ?sl .
-  FILTER(?sl >= %(lo)d && ?sl < %(hi)d)
-  FILTER(YEAR(?birth) = %(y)d)
-  ?p p:P54 ?st . ?st ps:P54 ?team ; pq:P1350 ?m ; pq:P580 ?start .
-  OPTIONAL { ?st pq:P582 ?end } OPTIONAL { ?st pq:P1351 ?g }
+LEAGUES = {"Premier League": ["Q9448"], "La Liga": ["Q324867"], "Serie A": ["Q15804"], "Bundesliga": ["Q82595"], "Ligue 1": ["Q13394"]}
+WINDOW = 4                    # start-year window per query
+FIRST_START, LAST_START = 1930, 2004
+SPELLS = """SELECT ?p ?pLabel ?birth ?posLabel ?teamLabel ?start ?end ?m ?g WHERE {
+  VALUES ?league { %(ids)s }
   ?team wdt:P118 ?league .
-  OPTIONAL { ?team wdt:P17 ?country }
+  ?p p:P54 ?st . ?st ps:P54 ?team ; pq:P1350 ?m ; pq:P580 ?start .
+  FILTER(?start >= "%(a)d-01-01T00:00:00Z"^^xsd:dateTime && ?start < "%(b)d-01-01T00:00:00Z"^^xsd:dateTime)
+  OPTIONAL { ?st pq:P582 ?end } OPTIONAL { ?st pq:P1351 ?g }
+  ?p wdt:P569 ?birth ; wikibase:sitelinks ?sl . FILTER(?sl >= %(sl)d)
   OPTIONAL { ?p wdt:P413 ?pos }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }"""
 AWARDS = """SELECT ?p ?awardLabel ?when WHERE {
-  ?p wdt:P106 wd:Q937857 ; wdt:P569 ?birth ; wikibase:sitelinks ?sl .
-  FILTER(?sl >= %(lo)d && YEAR(?birth) = %(y)d)
+  VALUES ?p { %(ids)s }
   ?p p:P166 ?a . ?a ps:P166 ?award ; pq:P585 ?when .
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }"""
+LOOKUP = 'SELECT ?l WHERE { ?l rdfs:label "Football League First Division"@en . ?l wdt:P31 ?t . } LIMIT 5'
+fails_in_row = 0
 
 
-def sparql(q, tries=4):
+def sparql(q, tries=2):
+    global fails_in_row
     last = None
     for i in range(tries):
         try:
             url = ENDPOINT + "?" + urllib.parse.urlencode({"query": q, "format": "json"})
-            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=100) as r:
-                return json.loads(r.read().decode("utf-8", "replace"))["results"]["bindings"]
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=70) as r:
+                out = json.loads(r.read().decode("utf-8", "replace"))["results"]["bindings"]
+            fails_in_row = 0
+            return out
         except urllib.error.HTTPError as e:
             last = e
             if e.code == 429:
-                time.sleep(int(e.headers.get("Retry-After", "20")))
+                time.sleep(min(60, int(e.headers.get("Retry-After", "20"))))
             else:
-                time.sleep(5 * (i + 1))
+                time.sleep(4)
         except Exception as e:
             last = e
-            time.sleep(5 * (i + 1))
-    raise RuntimeError(str(last)[:120])
+            time.sleep(4)
+    fails_in_row += 1
+    raise RuntimeError(str(last)[:100])
 
 
 def v(b, k):
     return b.get(k, {}).get("value")
 
 
-def fetch_year(y):
-    """Spells for players born in year y. A slow query is split by popularity band."""
-    rows = []
-    for lo, hi in ((MIN_SITELINKS, 60), (60, 10 ** 6)):
-        rows += sparql(SPELLS % {"lo": lo, "hi": hi, "y": y})
-        time.sleep(1.5)
-    return rows
+def read_json(path, default):
+    return json.load(open(path)) if os.path.exists(path) else default
 
 
-def load_year(y):
+def load_spells():
+    """All club spells in the five leagues, one cached file per league and start-year window."""
     os.makedirs(CACHE, exist_ok=True)
     local = os.environ.get("LEGENDS_DIR")
-    if local:
-        sp = f"{local}/{y}.json"; aw = f"{local}/{y}_awards.json"
-        return (json.load(open(sp)) if os.path.exists(sp) else []), (json.load(open(aw)) if os.path.exists(aw) else [])
-    sp, aw = f"{CACHE}/{y}.json", f"{CACHE}/{y}_awards.json"
-    if os.path.exists(sp) and os.path.exists(aw):
-        return json.load(open(sp)), json.load(open(aw))
-    if time.time() - T0 > BUDGET:
-        FAILED.append(f"{y}: skipped for now (time budget)")
-        return (json.load(open(sp)) if os.path.exists(sp) else []), (json.load(open(aw)) if os.path.exists(aw) else [])
-    try:
-        spells = fetch_year(y)
-        awards = sparql(AWARDS % {"lo": MIN_SITELINKS, "y": y}); time.sleep(1.5)
-    except Exception as e:
-        FAILED.append(f"{y}: {e}")
-        return [], []
-    spells = [{k: v(b, k) for k in ("p", "pLabel", "birth", "posLabel", "team", "teamLabel", "start", "end", "m", "g", "leagueLabel", "countryLabel")} for b in spells]
-    awards = [{k: v(b, k) for k in ("p", "awardLabel", "when")} for b in awards]
-    json.dump(spells, open(sp, "w"), separators=(",", ":")); json.dump(awards, open(aw, "w"), separators=(",", ":"))
-    return spells, awards
+    ids = {k: list(vv) for k, vv in LEAGUES.items()}
+    out = []
+    for lg, qids in ids.items():
+        for a in range(FIRST_START, LAST_START + 1, WINDOW):
+            tag = re.sub(r"[^a-z0-9]", "", lg.lower()) + f"_{a}"
+            path = f"{local}/{tag}.json" if local else f"{CACHE}/{tag}.json"
+            if os.path.exists(path):
+                out += read_json(path, []); continue
+            if local:
+                continue
+            if time.time() - T0 > BUDGET or fails_in_row >= 8:
+                FAILED.append(f"{lg} {a}: skipped for now ({'too many errors' if fails_in_row >= 8 else 'time budget'})"); continue
+            try:
+                rows = sparql(SPELLS % {"ids": " ".join("wd:" + q for q in qids), "a": a, "b": a + WINDOW, "sl": MIN_SITELINKS})
+            except Exception as e:
+                FAILED.append(f"{lg} {a}: {e}"); continue
+            rows = [dict({k: v(b, k) for k in ("p", "pLabel", "birth", "posLabel", "teamLabel", "start", "end", "m", "g")}, lg=lg) for b in rows]
+            json.dump(rows, open(path, "w"), separators=(",", ":")); out += rows
+            time.sleep(1.0)
+    return out
+
+
+def load_awards(players):
+    path = f"{CACHE}/awards.json" if not os.environ.get("LEGENDS_DIR") else os.environ["LEGENDS_DIR"] + "/awards.json"
+    have = read_json(path, {})
+    need = [p for p in players if p not in have]
+    if os.environ.get("LEGENDS_DIR"):
+        return have
+    for i in range(0, len(need), 120):
+        if time.time() - T0 > BUDGET or fails_in_row >= 8:
+            FAILED.append("awards: skipped for now"); break
+        chunk = need[i:i + 120]
+        try:
+            rows = sparql(AWARDS % {"ids": " ".join("wd:" + p.rsplit("/", 1)[-1] for p in chunk)})
+        except Exception as e:
+            FAILED.append(f"awards batch {i}: {e}"); continue
+        for p in chunk: have[p] = []
+        for b in rows: have["http://www.wikidata.org/entity/" + v(b, "p").rsplit("/", 1)[-1]].append({"awardLabel": v(b, "awardLabel"), "when": v(b, "when")})
+        json.dump(have, open(path, "w"), separators=(",", ":")); time.sleep(1.0)
+    return have
 
 
 def pos_of(label):
@@ -147,16 +171,14 @@ def year_of(s):
 
 
 def build():
-    spells, awards = [], collections.defaultdict(list)
-    for y in range(FIRST_BIRTH, LAST_BIRTH + 1):
-        sp, aw = load_year(y)
-        spells += sp
-        for a in aw:
-            awards[a["p"]].append(a)
+    spells = load_spells()
+    awards = collections.defaultdict(list)
+    for p, al in load_awards(sorted({x["p"] for x in spells})).items():
+        awards[p] = al
     # one row per (player, team, start)
     seen = {}
     for s in spells:
-        k = (s["p"], s["team"], s["start"])
+        k = (s["p"], s["teamLabel"], s["start"])
         if k not in seen:
             seen[k] = s
     by_player = collections.defaultdict(list)
@@ -178,14 +200,12 @@ def build():
             m = float(s["m"] or 0); g = float(s["g"]) if s["g"] not in (None, "") else None
             if m <= 0 or (g is None and pos in ("MID", "FWD")):
                 continue
-            league = top_league(s["leagueLabel"], s["countryLabel"])
-            if not league:
-                continue            # only careers in the five leagues the page covers
+            league = s["lg"]
             for k in range(n):
                 se = ys + 1 + k
                 if se > LAST_SEASON:
                     break
-                rows.append(dict(pid=pid, name=name, pos=pos, by=by, se=se, club=s["teamLabel"] or "", league=league, country=s["countryLabel"] or "",
+                rows.append(dict(pid=pid, name=name, pos=pos, by=by, se=se, club=s["teamLabel"] or "", league=league, country="",
                                  apps=m / n, goals=(g or 0.0) / n, tier=1, honours=[]))
     # merge duplicate (player, season) rows when two spells overlap
     merged = {}

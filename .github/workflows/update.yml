@@ -32,8 +32,10 @@ jobs:
         run: |
           python build_top5.py
       - name: Build earlier seasons for the five leagues from Wikidata
-        timeout-minutes: 50
+        timeout-minutes: 35
         continue-on-error: true
+        env:
+          LEGENDS_BUDGET_MIN: "25"
         run: python build_legends.py
       - name: Build the page
         run: python inject.py
