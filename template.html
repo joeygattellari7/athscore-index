@@ -686,8 +686,11 @@ function computeIndex(rows, s){
     const form=active ? agg('wF',sumF) : null;
     const base=form!==null ? s.blend*form+(1-s.blend)*career : career;
     const nT=seasons.reduce((a,x)=>a+((x.ex&&x.ex.titles>0)?x.ex.titles:0),0), nA=seasons.reduce((a,x)=>a+((x.ex&&x.ex.awards>0)?x.ex.awards:0),0);
-    const bonus=0;
-    const headline=base;   /* honours are already inside each season's rating */
+    /* Silverware over a whole career: each season's rating already carries its own honours, but a title in one of ten seasons is diluted by the average.
+       So career honour points (titles, European trophies, awards) also add a capped bonus, the same rule for every player. */
+    const careerHon=seasons.reduce((a,x)=>a+((x.ex&&x.ex.honpts>0)?x.ex.honpts:0),0);
+    const bonus=Math.min(8,0.2*careerHon);
+    const headline=base+bonus;
     const evidence=sumC;
     const confidence=evidence/(evidence+s.priorGames);
     const confLabel=confidence>=0.7?'High':(confidence>=0.45?'Medium':'Low');

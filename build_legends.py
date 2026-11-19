@@ -6,7 +6,7 @@ Queries run one birth year at a time and are cached in state/legends/ (finished 
 Run:  python3 build_legends.py   -> legends_players.csv
 Environment: LEGENDS_DIR=<folder> reads {year}.json and {year}_awards.json instead of the network (used for tests).
 """
-import csv, json, os, re, sys, time, collections, statistics, urllib.request, urllib.parse, urllib.error
+import unicodedata, csv, json, os, re, sys, time, collections, statistics, urllib.request, urllib.parse, urllib.error
 
 ENDPOINT = "https://query.wikidata.org/sparql"
 UA = {"User-Agent": "AthScoreIndex/1.0 (https://github.com/joeygattellari7/athscore-index; research project) python-urllib",
@@ -123,6 +123,24 @@ def top_league(label, country):
     return None
 
 
+LEAGUE_TITLES = {  # season end year -> {league: champion, letters only}
+    1993: {"Serie A": "milan", "La Liga": "barcelona", "Bundesliga": "werderbremen", "Ligue 1": "marseille", "Premier League": "manchesterunited"},
+    1994: {"Serie A": "milan", "La Liga": "barcelona", "Bundesliga": "bayernmunich", "Ligue 1": "parissaintgermain"},
+    1995: {"Serie A": "juventus", "La Liga": "realmadrid", "Bundesliga": "dortmund", "Ligue 1": "nantes"},
+    1996: {"Serie A": "milan", "La Liga": "atleticomadrid", "Bundesliga": "dortmund", "Ligue 1": "auxerre"},
+    1997: {"Serie A": "juventus", "La Liga": "realmadrid", "Bundesliga": "bayernmunich", "Ligue 1": "monaco"},
+    1998: {"Serie A": "juventus", "La Liga": "barcelona", "Bundesliga": "kaiserslautern", "Ligue 1": "lens"},
+    1999: {"Serie A": "milan", "La Liga": "barcelona", "Bundesliga": "bayernmunich", "Ligue 1": "bordeaux"},
+    2000: {"Serie A": "lazio", "La Liga": "deportivo", "Bundesliga": "bayernmunich", "Ligue 1": "monaco"},
+    2001: {"Serie A": "roma", "La Liga": "realmadrid", "Bundesliga": "bayernmunich", "Ligue 1": "nantes"},
+    2002: {"Serie A": "juventus", "La Liga": "valencia", "Bundesliga": "dortmund", "Ligue 1": "lyon"},
+    2003: {"Serie A": "juventus", "La Liga": "realmadrid", "Bundesliga": "bayernmunich", "Ligue 1": "lyon"},
+    2004: {"Serie A": "milan", "La Liga": "valencia", "Bundesliga": "werderbremen", "Ligue 1": "lyon"},
+    2005: {"Serie A": "juventus", "La Liga": "barcelona", "Bundesliga": "bayernmunich", "Ligue 1": "lyon"}}
+CL_WINNERS = {1993: "marseille", 1994: "milan", 1995: "ajax", 1996: "juventus", 1997: "dortmund", 1998: "realmadrid", 1999: "manchesterunited",
+              2000: "realmadrid", 2001: "bayernmunich", 2002: "realmadrid", 2003: "milan", 2004: "porto", 2005: "liverpool"}
+
+
 def year_of(s):
     m = re.match(r"-?(\d{4})", str(s or ""))
     return int(m.group(1)) if m else None
@@ -191,6 +209,13 @@ def build():
                     if abs(se - yr) <= 1 and nm not in idx[pid][se]["honours"]:
                         idx[pid][se]["honours"].append(nm)
                     break
+    # team honours 1993-2005 (season = end year). Wikidata awards hold individual prizes only, so league titles and Champions League wins are entered here.
+    for r in rows:
+        ck = re.sub(r"[^a-z]", "", unicodedata.normalize("NFKD", r["club"]).encode("ascii", "ignore").decode().lower())
+        for nm, key in (("League champions", LEAGUE_TITLES.get(r["se"], {}).get(r["league"])), ("Champions League", CL_WINNERS.get(r["se"]))):
+            ok = key and (ck == key or (len(key) > 5 and key in ck) or (len(key) <= 5 and re.fullmatch(r"(as|ac|ss|rc)?" + key + r"(fc)?", ck)))
+            if ok and r["apps"] >= 10 and nm not in r["honours"]:
+                r["honours"].append(nm)
     # rating: output from goals per game (outfield) or appearances (keepers and defenders), z-scored within position and decade
     for r in rows:
         r["gpg"] = r["goals"] / r["apps"] if r["apps"] else 0
@@ -205,7 +230,7 @@ def build():
         for r in g:
             z = max(-2.5, min(3.5, (key(r) - mu) / sd))
             r["out"] = round(max(0.0, min(100.0, 50 + 16 * wgt * z)), 1)
-    pts = {"Ballon d'Or": 6.0, "Golden Boot": 3.0, "Player of the Season": 3.0}
+    pts = {"Ballon d'Or": 6.0, "Golden Boot": 3.0, "Player of the Season": 3.0, "League champions": 6.0, "Champions League": 6.0}
     for r in rows:
         r["imp"] = r["out"]                                          # no team goals to compare against: reuse output
         r["cred"] = 50.0                                             # no team table for these clubs: neutral
@@ -229,7 +254,7 @@ def main():
         w = csv.writer(fh); w.writerow(hdr)
         for r in rows:
             w.writerow([r["name"], "Football", r["pos"], r["league"], r["tier"], r["se"], round(r["apps"], 1), r["perf"], "", r["by"] or "", r["club"],
-                        round(r["apps"]), "", round(r["goals"]), "", "", "", "", "", "", "", "", 0, len(r["honours"]), "; ".join(r["honours"]), "", "", 0,
+                        round(r["apps"]), "", round(r["goals"]), "", "", "", "", "", "", "", "", int("League champions" in r["honours"]), len([h for h in r["honours"] if h != "League champions"]), "; ".join(r["honours"]), "", "", 0,
                         r["out"], r["imp"], r["cred"], r["avail"], r["hon"], r["honpts"], "", ""])
     print(len(rows), "player-seasons,", len({r["pid"] for r in rows}), "players")
     json.dump({"rows": len(rows), "players": len({r["pid"] for r in rows}), "failed": FAILED}, open("legends_status.json", "w"))
