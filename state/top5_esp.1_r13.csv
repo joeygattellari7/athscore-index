@@ -1,481 +1,482 @@
 athlete,perf,games
-Wojciech Szczesny,21.7,0.5
-Dominik Livakovic,31.2,1.0
-Joan García,57.9,10.5
-Eric García,58.3,6.9
-João Cancelo,51.5,4.6
-Andreas Christensen,55.9,4.8
-Jules Koundé,50.0,3.9
-Gerard Martín,62.4,8.4
-Alejandro Balde,33.0,1.1
-Pau Cubarsí,66.8,8.7
-Xavi Espart,60.3,7.2
-Frenkie de Jong,34.7,1.6
-Dani Olmo,62.6,3.9
+Wojciech Szczesny,21.1,0.5
+Dominik Livakovic,31.3,1.0
+Joan García,57.2,11.5
+Eric García,59.1,7.8
+João Cancelo,53.4,5.6
+Andreas Christensen,55.6,4.8
+Jules Koundé,49.6,4.0
+Gerard Martín,65.0,9.4
+Alejandro Balde,32.8,1.1
+Pau Cubarsí,66.4,8.7
+Xavi Espart,59.8,7.2
+Frenkie de Jong,37.3,2.6
+Dani Olmo,62.8,4.1
 Rodri,55.6,7.7
-Pedri,57.8,9.4
+Pedri,60.6,10.4
 Gavi,38.1,1.8
-Fermín López,78.0,8.6
-Marc Bernal,50.8,4.8
-Brian Fariñas,33.6,1.5
-Gabriel Jesus,56.4,2.5
-Raphinha,77.2,9.0
-Anthony Gordon,60.4,7.6
-Karim Adeyemi,55.8,4.7
-Lamine Yamal,78.7,11.1
-Hamza Abdelkarim,25.1,0.1
-Thibaut Courtois,61.1,12.0
-Andriy Lunin,42.3,1.0
-Antonio Rüdiger,53.6,3.4
-Denzel Dumfries,43.7,5.0
-Trent Alexander-Arnold,47.9,4.6
-Éder Militão,48.4,0.1
-Ibrahima Konaté,60.5,12.0
-Marc Cucurella,59.8,9.6
-Álvaro Carreras,47.9,3.4
-Dean Huijsen,66.0,10.6
+Fermín López,78.0,9.4
+Marc Bernal,51.9,5.8
+Brian Fariñas,33.5,1.5
+Gabriel Jesus,56.5,2.5
+Raphinha,77.2,10.0
+Anthony Gordon,60.5,7.8
+Karim Adeyemi,55.7,5.4
+Lamine Yamal,78.9,12.1
+Hamza Abdelkarim,25.0,0.1
+Thibaut Courtois,61.2,12.0
+Andriy Lunin,42.1,1.0
+Antonio Rüdiger,53.2,3.4
+Denzel Dumfries,43.4,5.0
+Trent Alexander-Arnold,47.5,4.6
+Éder Militão,48.3,0.1
+Ibrahima Konaté,60.1,12.0
+Marc Cucurella,59.4,9.6
+Álvaro Carreras,47.5,3.4
+Dean Huijsen,65.7,10.6
 Bernardo Silva,48.8,6.7
 Federico Valverde,56.1,10.3
 Brahim Díaz,34.9,1.7
 Aurélien Tchouaméni,49.0,7.0
-Eduardo Camavinga,44.2,4.1
-Jude Bellingham,71.3,11.6
-Arda Güler,72.7,9.3
+Eduardo Camavinga,44.1,4.1
+Jude Bellingham,71.4,11.6
+Arda Güler,72.8,9.3
 Thiago Pitarch,29.4,0.0
-Kylian Mbappé,77.8,12.9
-Vinícius Júnior,54.5,6.9
-Endrick,35.4,1.1
-Carlos Espí,54.1,0.5
-Yan Diomande,55.3,8.7
-Jan Oblak,62.4,12.0
-Cristian Romero,55.7,4.8
-Alejandro Grimaldo,67.7,10.4
-Robin Le Normand,54.5,4.2
-Dávid Hancko,68.9,10.4
-Marc Pubill,58.1,8.5
-Jorge Domínguez,32.0,0.5
-Daniel Martinez,35.2,1.5
-Rodrigo Mendoza,36.7,1.6
-Koke,44.7,5.8
-Marcos Llorente,51.7,9.6
-Lee Kang-In,57.7,8.4
-Morten Hjulmand,45.0,6.9
-Johnny Cardoso,43.4,3.7
-Álex Baena,75.9,8.5
-Pablo Barrios,49.0,6.7
-Alexander Sørloth,28.3,1.0
-Ademola Lookman,45.5,6.8
-Jonathan David,62.3,3.7
-Julián Álvarez,53.1,4.7
-Giuliano Simeone,57.2,9.6
-Arnau Ortiz,33.7,1.7
-Álvaro Valles,62.7,13.0
-Marc Bartra,64.0,6.9
-Héctor Bellerín,55.5,10.4
-Diego Llorente,48.4,4.2
-Fran García,56.5,10.3
-Junior Firpo,40.1,1.7
-Natan,65.7,11.0
-Valentín Gómez,55.2,4.9
-Ángel Ortiz,42.6,2.6
-Rodrigo Riquelme,55.3,5.4
-Isco,63.6,7.8
+Kylian Mbappé,78.1,12.9
+Vinícius Júnior,54.3,6.9
+Endrick,35.3,1.1
+Carlos Espí,54.2,0.5
+Yan Diomande,55.2,8.7
+Jan Oblak,64.2,13.0
+Cristian Romero,56.2,4.8
+Alejandro Grimaldo,69.9,11.4
+Robin Le Normand,56.8,5.2
+Dávid Hancko,71.0,11.4
+Marc Pubill,58.7,8.5
+Jorge Domínguez,32.7,0.5
+Daniel Martinez,36.0,1.5
+Rodrigo Mendoza,36.5,1.8
+Koke,46.2,6.8
+Marcos Llorente,52.1,10.6
+Lee Kang-In,57.3,8.9
+Morten Hjulmand,44.9,6.9
+Johnny Cardoso,49.4,4.2
+Álex Baena,77.3,9.3
+Pablo Barrios,49.9,7.7
+Alexander Sørloth,30.2,1.2
+Ademola Lookman,45.3,6.8
+Jonathan David,61.9,3.7
+Julián Álvarez,59.3,5.5
+Giuliano Simeone,56.5,10.6
+Arnau Ortiz,33.4,1.7
+Álvaro Valles,62.5,13.0
+Marc Bartra,63.5,6.9
+Héctor Bellerín,55.1,10.4
+Diego Llorente,48.0,4.2
+Fran García,56.0,10.3
+Junior Firpo,39.7,1.7
+Natan,65.3,11.0
+Valentín Gómez,54.8,4.9
+Ángel Ortiz,42.3,2.6
+Rodrigo Riquelme,55.4,5.4
+Isco,63.7,7.8
 Dani Ceballos,44.1,2.9
-Giovani Lo Celso,50.4,1.0
-Pablo Fornals,52.9,9.8
+Giovani Lo Celso,50.5,1.0
+Pablo Fornals,52.8,9.8
 Marc Roca,47.0,9.6
-Álvaro Fidalgo,29.9,0.7
+Álvaro Fidalgo,29.8,0.7
 Nelson Deossa,47.2,5.2
-Facundo Bernal,38.0,5.2
-Aitor Ruibal,29.7,1.1
-Troy Parrott,45.6,4.6
+Facundo Bernal,37.9,5.2
+Aitor Ruibal,29.6,1.1
+Troy Parrott,45.4,4.6
 Antony,47.7,8.6
 Abde Ezzalzouli,50.5,8.4
 Cucho Hernández,51.8,6.5
 José Morante,52.6,0.1
-Álex Remiro,48.4,11.0
-Unai Marrero,33.6,1.0
-Igor Zubeldia,40.1,5.9
+Álex Remiro,47.1,12.0
+Unai Marrero,33.4,1.0
+Igor Zubeldia,41.8,6.9
 Aihen Muñoz,31.0,2.2
-Jon Pacheco,34.9,0.2
-Jon Aramburu,44.8,8.6
-Mamadou Sarr,40.5,5.6
-Héctor Fort,34.9,1.8
-Jon Martín,52.7,10.1
+Jon Pacheco,34.6,0.2
+Jon Aramburu,45.7,8.9
+Mamadou Sarr,41.8,6.6
+Héctor Fort,36.9,2.6
+Jon Martín,52.5,10.1
 Luken Beitia,35.5,3.0
-Carlos Soler,56.2,8.9
-Yangel Herrera,41.1,5.7
-Beñat Turrientes,44.7,4.6
-Luka Sucic,55.5,9.6
-Arsen Zakharyan,52.9,0.8
-Pablo Marín,27.7,0.7
-Jon Gorrotxategi,36.7,4.5
-Gonçalo Guedes,47.5,6.2
-Mikel Oyarzabal,49.2,8.7
-Takefusa Kubo,41.8,4.1
-Sergio Gómez,38.2,9.8
-Ander Barrenetxea,48.6,7.0
-Orri Óskarsson,48.1,6.6
-Alex Marchal,31.3,1.2
-Job Ochieng,51.3,3.5
-Odisseas Vlachodimos,48.1,13.0
-Gabriel Suazo,50.1,13.0
-José Ángel Carmona,25.5,0.9
-Juan Iglesias,51.4,12.8
-Arouna Sangante,35.9,4.0
-Andrés Castrín,51.6,10.5
-Enrique Salas,57.4,11.0
-Julio Díaz,23.5,1.2
+Carlos Soler,55.8,9.7
+Yangel Herrera,40.9,5.7
+Beñat Turrientes,44.6,4.7
+Luka Sucic,55.8,10.6
+Arsen Zakharyan,54.0,0.9
+Pablo Marín,27.6,0.7
+Jon Gorrotxategi,41.7,5.4
+Gonçalo Guedes,51.1,7.2
+Mikel Oyarzabal,52.1,9.7
+Takefusa Kubo,41.7,4.4
+Sergio Gómez,41.3,10.8
+Ander Barrenetxea,48.2,7.0
+Orri Óskarsson,47.5,7.5
+Alex Marchal,31.1,1.2
+Job Ochieng,51.1,3.5
+Odisseas Vlachodimos,47.9,13.0
+Gabriel Suazo,49.8,13.0
+José Ángel Carmona,25.3,0.9
+Juan Iglesias,51.0,12.8
+Arouna Sangante,35.7,4.0
+Andrés Castrín,51.4,10.5
+Enrique Salas,57.1,11.0
+Julio Díaz,23.3,1.2
 Jon Guridi,40.4,4.6
 Giorgi Kochorashvili,40.5,3.4
 Rubén Vargas,35.1,2.7
-Youssouf Fofana,53.6,8.9
-Lucien Agoumé,40.4,12.7
-Manu Bueno,45.3,1.6
+Youssouf Fofana,53.7,8.9
+Lucien Agoumé,40.3,12.7
+Manu Bueno,45.4,1.6
 Nico Guillén,30.8,1.0
 Chidera Ejuke,37.3,5.3
-Alfonso González,30.3,0.7
-Felix Correia,47.2,7.4
-Robbie Ure,43.4,6.7
-Lucas Stassin,42.1,6.0
-Peque,39.0,2.5
-Isaac Romero,51.0,4.7
-Miguel Sierra,41.0,6.3
-Julen Agirrezabala,29.0,12.0
-Jorge Salinas,29.4,10.0
-Aarón Martín,15.8,2.7
-Manu (1998),29.9,4.4
-Pablo Ramon,35.3,8.4
-Alvaro Mantilla,28.4,9.0
-Jeanuël Belocian,29.5,7.4
-Pedro Felipe ,28.7,2.6
-Facundo González,27.0,2.7
-Matteo Prati,36.6,7.6
-Sergio Canales,47.1,10.0
+Alfonso González,30.1,0.7
+Felix Correia,47.1,7.4
+Robbie Ure,43.2,6.7
+Lucas Stassin,42.0,6.0
+Peque,39.1,2.5
+Isaac Romero,51.1,4.7
+Miguel Sierra,41.1,6.3
+Julen Agirrezabala,28.8,13.0
+Jorge Salinas,30.1,11.0
+Aarón Martín,15.9,2.7
+Manu (1998),30.1,4.4
+Pablo Ramon,35.6,9.4
+Alvaro Mantilla,28.5,9.0
+Jeanuël Belocian,29.9,8.4
+Pedro Felipe ,29.8,3.6
+Facundo González,27.1,2.7
+Matteo Prati,37.2,8.6
+Sergio Canales,50.6,10.8
 Íñigo Sainz,31.6,1.4
 André Almeida,34.9,2.9
-Iván Martín,41.0,8.8
-Maguette Gueye,42.7,1.7
-Andrés Martín,39.4,4.2
-Asier Villalibre,33.9,2.9
-Iñigo Vicente,46.5,10.7
-Giorgi Guliashvili,31.2,1.0
-Juan Carlos Arana,26.1,0.7
-Yassir Zabiri,60.7,8.9
-Pablo García (2006),38.2,3.9
-Iker Luque,35.8,3.8
+Iván Martín,41.1,9.8
+Maguette Gueye,42.5,1.7
+Andrés Martín,39.2,4.2
+Asier Villalibre,33.4,2.9
+Iñigo Vicente,45.3,11.7
+Giorgi Guliashvili,31.0,1.0
+Juan Carlos Arana,25.9,0.7
+Yassir Zabiri,64.0,9.9
+Pablo García (2006),38.2,4.0
+Iker Luque,40.0,4.8
 Unai Simón,55.7,12.3
-Yuri Berchiche,54.8,9.3
-Aymeric Laporte,54.2,10.1
-Yeray,51.8,5.8
-Dani Vivian,49.1,3.0
-Jesús Areso,39.3,4.4
-Aitor Paredes,54.6,5.7
-Johaneko Louis Jean,40.9,3.1
-Hugo Rincón,44.7,6.8
+Yuri Berchiche,54.3,9.3
+Aymeric Laporte,53.8,10.1
+Yeray,51.3,5.8
+Dani Vivian,48.8,3.0
+Jesús Areso,39.0,4.4
+Aitor Paredes,54.0,5.7
+Johaneko Louis Jean,40.6,3.1
+Hugo Rincón,44.3,6.8
 Iñigo Ruiz de Galarreta,40.7,5.9
 Robert Navarro,49.0,7.6
 Oihan Sancet,42.2,7.0
 Beñat Prados,30.0,1.0
 Mikel Jauregizar,34.6,3.4
 Beñat Gerenabarrena,36.7,7.7
-Peio Canales,37.4,7.6
-Alejandro Rego,30.5,0.7
+Peio Canales,37.3,7.6
+Alejandro Rego,30.4,0.7
 Álex Berenguer,60.0,9.4
 Iñaki Williams,51.0,9.8
-Gorka Guruzeta,27.8,2.0
+Gorka Guruzeta,27.6,2.0
 Nico Williams,46.7,7.8
-Nico Serrano,27.9,0.0
-Álvaro Djaló,24.9,0.1
-Maroan Sannadi,28.9,2.8
-Christian Imga,25.0,0.2
-Jesús Vizcay Hurtado,24.9,0.1
-Antonio Sivera,47.6,13.0
-Ville Koski,52.8,12.1
-Jonny,44.6,9.4
-Nahuel Tenaglia,52.3,12.5
-Nicolás Valentini,41.4,6.0
-Ángel Pérez,46.1,9.4
-Youssef Lekhedim,38.5,4.2
-Xanet Oláiz,40.9,0.2
-Pablo Ibáñez (1998),41.3,11.7
+Nico Serrano,27.8,0.0
+Álvaro Djaló,24.7,0.1
+Maroan Sannadi,28.7,2.8
+Christian Imga,24.9,0.2
+Jesús Vizcay Hurtado,24.7,0.1
+Antonio Sivera,47.5,13.0
+Ville Koski,52.5,12.1
+Jonny,44.4,9.4
+Nahuel Tenaglia,51.9,12.5
+Nicolás Valentini,41.2,6.0
+Ángel Pérez,45.7,9.4
+Youssef Lekhedim,38.3,4.2
+Xanet Oláiz,40.4,0.2
+Pablo Ibáñez (1998),41.2,11.7
 Denis Suárez,41.8,6.3
-Carles Aleñá,42.3,2.5
-Carlos Protesoni,32.2,2.7
+Carles Aleñá,42.4,2.5
+Carlos Protesoni,32.1,2.7
 Ander Guevara,31.2,3.2
-Antonio Blanco,41.0,10.4
-Mikel Rodriguez,45.0,1.7
-Miguel Rodríguez,30.9,0.1
-Toni Martínez,34.3,7.7
+Antonio Blanco,40.9,10.4
+Mikel Rodriguez,45.1,1.7
+Miguel Rodríguez,30.7,0.1
+Toni Martínez,34.1,7.7
 Mariano Díaz,60.2,5.4
-Lucas Boyé,54.1,10.9
-Hugo Novoa,44.8,1.1
-Abde Rebbach,34.2,10.5
-Aitor Mañas,38.8,1.7
-Péter Gulácsi,43.5,8.0
-Luiz Júnior,19.8,4.0
-Juan Foyth,40.1,5.3
-Alex Freeman,42.8,6.9
-Logan Costa,33.6,2.9
-Carlos Romero,36.9,6.0
-Sergi Cardona,38.3,5.7
-Santiago Mouriño,39.8,6.5
-Renato Veiga,51.5,11.0
-Pau Navarro,35.9,4.8
-Santi Comesaña,35.2,6.7
-Pape Gueye,49.7,9.0
-Alberto Moleiro,62.5,8.2
+Lucas Boyé,54.2,10.9
+Hugo Novoa,45.1,1.1
+Abde Rebbach,34.0,10.5
+Aitor Mañas,39.0,1.7
+Péter Gulácsi,44.7,9.0
+Luiz Júnior,19.2,4.0
+Juan Foyth,40.0,5.3
+Alex Freeman,44.3,7.9
+Logan Costa,33.5,2.9
+Carlos Romero,37.4,6.7
+Sergi Cardona,38.6,6.0
+Santiago Mouriño,40.0,6.5
+Renato Veiga,51.1,12.0
+Pau Navarro,36.5,5.8
+Santi Comesaña,35.4,7.6
+Pape Gueye,48.9,10.0
+Alberto Moleiro,63.8,8.9
 Nathan Saliba,33.7,4.0
-Carlos Macià,33.1,4.1
-Gerard Moreno,41.9,4.8
-Ayoze Pérez,47.2,7.2
-Nicolas Pépé,45.0,5.7
-Tajon Buchanan,38.5,7.1
-Tani Oluwaseyi,32.4,2.3
-Georges Mikautadze,49.0,7.4
-Ilias Akhomach,40.0,4.3
-Nizar El Jmili Ben Hamou,30.9,0.1
-Marko Dmitrovic,39.1,7.0
+Carlos Macià,33.0,4.4
+Gerard Moreno,41.6,4.8
+Ayoze Pérez,46.3,7.4
+Nicolas Pépé,44.3,5.8
+Tajon Buchanan,41.2,7.9
+Tani Oluwaseyi,37.4,3.3
+Georges Mikautadze,47.8,8.3
+Ilias Akhomach,39.4,4.3
+Nizar El Jmili Ben Hamou,30.7,0.1
+Marko Dmitrovic,39.0,7.0
 Ángel Fortuño,54.0,6.0
-Leandro Cabrera,54.5,10.0
-Unai Núñez,42.8,5.1
-Vanja Drkusic,41.8,4.0
-Omar El Hilali,49.8,11.8
-Clemens Riedel,44.9,7.0
-Quilindschy Hartman,37.7,5.5
-José Ángel López,24.4,1.3
-Roger Hinojo,42.7,8.4
+Leandro Cabrera,54.2,10.0
+Unai Núñez,42.6,5.1
+Vanja Drkusic,41.6,4.0
+Omar El Hilali,49.5,11.8
+Clemens Riedel,44.7,7.0
+Quilindschy Hartman,37.5,5.5
+José Ángel López,24.2,1.3
+Roger Hinojo,42.4,8.4
 Pere Milla,30.8,2.4
 Edu Expósito,44.0,10.8
-Pol Lozano,33.7,5.7
-Urko Gonzalez,32.0,5.3
-Cala (2000),40.4,6.3
+Pol Lozano,33.6,5.7
+Urko Gonzalez,31.9,5.3
+Cala (2000),40.3,6.3
 Gabriel Moscardo,31.4,2.5
-Javi Hernandez,58.7,10.1
+Javi Hernandez,58.8,10.1
 Rafael Bauza,39.8,2.6
-Javier Puado,29.2,0.4
-Tyrhys Dolan,38.5,7.1
-Jofre Carreras,28.0,0.2
+Javier Puado,29.1,0.4
+Tyrhys Dolan,38.3,7.1
+Jofre Carreras,27.9,0.2
 Bryan Zaragoza,40.1,5.1
-Roberto Fernández (2002),54.0,12.6
-Marcos Fernández,46.5,2.7
-Jan Peries Duran,24.9,0.1
-Alejandro Santiago,28.8,2.8
-Leo Román,43.8,13.0
-Ximo Navarro,39.7,7.8
+Roberto Fernández (2002),54.2,12.6
+Marcos Fernández,46.4,2.7
+Jan Peries Duran,24.7,0.1
+Alejandro Santiago,28.6,2.8
+Leo Román,43.7,13.0
+Ximo Navarro,39.6,7.8
 José María Giménez,47.6,9.2
 Angeliño,29.9,0.8
 Miguel Loureiro,48.5,6.2
-Giacomo Quagliata,41.3,11.7
-Adrià Altimira,31.4,6.3
-Lucas Noubi,42.9,6.0
-Bright Ede,37.9,5.1
+Giacomo Quagliata,41.2,11.7
+Adrià Altimira,31.3,6.3
+Lucas Noubi,42.8,6.0
+Bright Ede,37.8,5.1
 Riki Rodríguez,37.6,4.6
 Mario Soriano Carreno,55.4,11.1
 Diego Villares,40.2,4.0
 Marc Casadó,30.6,2.5
-Lorenzo Amatucci,39.9,9.6
-Jonathan Asp Jensen,36.4,3.1
-Pierre-Emerick Aubameyang,57.2,8.0
-Adama Traoré,30.8,3.5
-Zakaria Eddahchouri,48.8,0.8
-Yeremay Hernández,40.1,6.9
-Luismi Cruz,44.8,8.1
+Lorenzo Amatucci,39.8,9.6
+Jonathan Asp Jensen,36.3,3.1
+Pierre-Emerick Aubameyang,57.5,8.0
+Adama Traoré,30.6,3.5
+Zakaria Eddahchouri,49.2,0.8
+Yeremay Hernández,40.0,6.9
+Luismi Cruz,44.6,8.1
 Kevin Sanchez,31.2,0.2
-David Mella,29.6,4.2
+David Mella,29.4,4.2
 Bil Nsongo,40.9,9.7
-Aitor Fernández,30.7,6.0
-Sergio Herrera,33.3,6.0
-Diego Rico,19.6,1.1
-Valentin Rosier,29.1,4.0
-Alejandro Catena,49.5,11.0
-Abel Bretones,40.2,10.9
-Jorge Herrando,30.3,2.1
-Enzo Boyomo,37.3,6.2
-Rockson Yeboah,31.9,2.3
-Iñigo Arguibide,30.8,7.4
-Unai Santos,30.0,2.3
-Lucas Torró,33.1,5.7
-Rubén García,43.2,7.7
-Jon Moncayola,36.2,9.8
-Aimar Oroz,30.5,1.7
-Iker Muñoz,34.8,7.3
-Asier Osambela,39.7,4.6
-Mauro Echegoyen,35.7,0.3
-Moi Gómez,38.7,7.1
-Ante Budimir,59.7,10.3
-Enrique Barja,37.1,2.9
-Romain Del Castillo,25.1,0.4
-Raúl García (2000),39.9,5.4
-Raúl Moro,31.7,3.9
-Jonathan Dubasin,32.4,5.5
+Aitor Fernández,30.3,6.0
+Sergio Herrera,36.3,7.0
+Diego Rico,23.4,2.1
+Valentin Rosier,35.1,5.0
+Alejandro Catena,49.8,12.0
+Abel Bretones,41.2,10.9
+Jorge Herrando,31.4,2.1
+Enzo Boyomo,40.2,7.2
+Rockson Yeboah,33.0,2.3
+Iñigo Arguibide,31.8,7.4
+Unai Santos,31.1,2.3
+Lucas Torró,33.6,5.8
+Rubén García,43.3,8.6
+Jon Moncayola,37.1,10.8
+Aimar Oroz,30.9,2.4
+Iker Muñoz,34.9,7.5
+Asier Osambela,39.1,4.9
+Mauro Echegoyen,35.6,0.3
+Moi Gómez,38.3,8.0
+Ante Budimir,61.6,11.3
+Enrique Barja,36.4,3.6
+Romain Del Castillo,24.9,0.4
+Raúl García (2000),39.4,5.4
+Raúl Moro,31.4,4.2
+Jonathan Dubasin,32.2,5.5
 Andrei Radu,54.4,13.0
-Abdoulaye Faye,49.0,0.5
-Marcos Alonso,53.3,8.7
-Carl Starfelt,49.2,2.4
-Javi Galán,38.7,6.4
-Sebastián Cáceres,44.3,4.5
-Sergio Carreira,43.7,8.8
-Javi Rueda,43.0,8.1
-Álvaro Núñez,39.0,3.9
-Javi Rodríguez,49.7,7.1
-Yoel Lago,56.2,11.5
+Abdoulaye Faye,48.6,0.5
+Marcos Alonso,52.9,8.7
+Carl Starfelt,48.7,2.4
+Javi Galán,38.2,6.4
+Sebastián Cáceres,43.9,4.5
+Sergio Carreira,43.3,8.8
+Javi Rueda,42.6,8.1
+Álvaro Núñez,38.6,3.9
+Javi Rodríguez,49.2,7.1
+Yoel Lago,55.8,11.5
 Hugo Álvarez,43.1,7.4
-Aleix Febas,31.3,5.4
+Aleix Febas,31.2,5.4
 Ilaix Moriba,41.3,11.0
-Miguel Román,49.2,6.4
-Andrés Antañón,31.2,1.6
-Hugo Burcio,32.1,2.2
-Iago Aspas,41.8,4.2
-Pablo Durán,44.8,6.5
-Borja Iglesias,28.3,0.9
+Miguel Román,49.3,6.4
+Andrés Antañón,31.1,1.6
+Hugo Burcio,32.0,2.2
+Iago Aspas,41.7,4.2
+Pablo Durán,44.9,6.5
+Borja Iglesias,28.1,0.9
 Ferran Jutglà,38.3,7.6
-Couhaib Driouech,29.7,3.0
-Williot Swedberg,35.7,5.7
-Hugo González,50.6,3.9
-Jones El-Abdellaoui,27.3,1.7
-Daniel Cárdenas,22.4,2.3
-Augusto Batalla,24.4,1.7
-Emil Audero,40.9,8.3
-Florian Lejeune,48.9,12.3
+Couhaib Driouech,29.4,3.0
+Williot Swedberg,35.5,5.7
+Hugo González,50.4,3.9
+Jones El-Abdellaoui,27.2,1.7
+Daniel Cárdenas,21.9,2.3
+Augusto Batalla,24.5,1.7
+Emil Audero,40.8,8.3
+Florian Lejeune,48.8,12.3
 Iván Balliu,27.8,4.1
-Mujaid Sadick,36.4,6.8
-Adrià Pedrosa,38.6,8.3
-Andrei Ratiu,40.7,9.0
-Jozhua Vertrouwd,23.6,2.1
+Mujaid Sadick,36.2,6.8
+Adrià Pedrosa,38.3,8.3
+Andrei Ratiu,40.5,9.0
+Jozhua Vertrouwd,23.5,2.1
 Pelayo Fernández,24.6,0.7
-Álvaro García,55.3,8.8
+Álvaro García,55.4,8.8
 Unai López,54.0,11.0
 Pedro Díaz,36.8,7.2
 Isi Palazón,32.5,3.1
-Óscar Valentín,33.8,5.2
+Óscar Valentín,33.7,5.2
 Randy Nteka,31.9,2.5
-Pathé Ciss,37.8,11.3
-Gnangoro Bouare Samake,42.8,2.8
+Pathé Ciss,37.7,11.3
+Gnangoro Bouare Samake,42.7,2.8
 Jorge de Frutos,44.5,8.6
-Giorgi Tsitaishvili,31.5,5.2
-Sergio Camello,60.4,9.6
-Alexandre Alemão,29.5,2.3
-Fran Pérez,25.9,1.7
-Rayane Belaid,25.0,0.3
-Stole Dimitrievski,49.5,13.0
-José Gayà,38.9,8.8
-Jesús Vázquez,32.1,4.0
-Pablo Maffeo,39.4,8.9
-Mouctar Diakhaby,40.3,3.9
-Justin de Haas,41.3,5.6
-Copete,38.0,0.8
-Arnau Martínez,33.4,5.3
-César Tárrega,51.2,8.7
-Iker Córdoba,42.9,1.1
-Javier Guerra,44.1,11.8
-Guido Rodríguez,34.7,9.1
-Pepelu,42.6,12.3
-Aliou Dieng,30.8,2.7
-Filip Ugrinic,34.4,7.2
+Giorgi Tsitaishvili,31.3,5.2
+Sergio Camello,60.6,9.6
+Alexandre Alemão,29.4,2.3
+Fran Pérez,25.7,1.7
+Rayane Belaid,24.8,0.3
+Stole Dimitrievski,49.2,13.0
+José Gayà,38.6,8.8
+Jesús Vázquez,31.9,4.0
+Pablo Maffeo,39.1,8.9
+Mouctar Diakhaby,40.1,3.9
+Justin de Haas,40.9,5.6
+Copete,37.6,0.8
+Arnau Martínez,33.1,5.3
+César Tárrega,50.9,8.7
+Iker Córdoba,42.8,1.1
+Javier Guerra,43.6,11.8
+Guido Rodríguez,34.6,9.1
+Pepelu,42.5,12.3
+Aliou Dieng,30.7,2.7
+Filip Ugrinic,34.3,7.2
 Harvey Elliott,33.3,1.7
 Ryunosuke Sato,29.9,3.3
-Aaron Mayol,39.3,3.9
-Umar Sadiq,42.1,3.7
-Arnaut Danjuma,37.8,10.3
+Aaron Mayol,39.2,3.9
+Umar Sadiq,42.3,3.7
+Arnaut Danjuma,37.7,10.3
 Dani Raba,36.4,2.9
-Luis Rioja,34.7,5.1
-Hugo Duro,33.6,4.7
+Luis Rioja,34.6,5.1
+Hugo Duro,33.4,4.7
 David Otorbi,36.5,3.8
-Aimar Blázquez,30.4,0.4
-David Soria,43.2,12.0
-Kiko Femenía,24.1,3.7
-Dani Carvajal,26.6,3.9
-Johan Mojica,35.2,9.0
-Djené,40.6,9.9
-Abdel Abqar,27.7,2.2
-Zaid Romero,37.4,6.2
+Aimar Blázquez,30.3,0.4
+David Soria,43.3,13.0
+Kiko Femenía,24.8,4.2
+Dani Carvajal,26.5,3.9
+Johan Mojica,36.7,10.0
+Djené,40.4,10.9
+Abdel Abqar,27.6,2.2
+Zaid Romero,38.6,7.2
 Saba Sazonov,33.1,1.7
-Andrés García,36.1,8.9
-Sebastián Boselli,39.7,3.7
-Jean Ives Valou,35.6,2.7
-Davinchi,25.4,2.0
+Andrés García,37.9,9.8
+Sebastián Boselli,39.6,3.7
+Jean Ives Valou,35.4,3.2
+Davinchi,25.2,2.1
 Nemanja Gudelj,33.7,9.2
-Orel Mangala,38.4,7.6
-Francho Serrano,36.8,6.5
-Ramón Terrats,42.0,9.5
-Mario Martín,29.7,6.7
+Orel Mangala,38.8,8.6
+Francho Serrano,37.1,7.2
+Ramón Terrats,42.0,10.0
+Mario Martín,29.7,6.9
 Alberto Risco,28.7,0.7
-Óscar López,27.2,0.1
-Enes Ünal,43.5,9.0
-Borja Mayoral,24.9,0.3
-Martín Satriano,52.8,10.3
-Ivan Azón,41.5,4.7
-Joselu Pérez,24.8,0.1
-Mathew Ryan,45.0,12.0
-Aïssa Mandi,45.1,9.7
-Jeremy Toljan,34.2,6.8
-Víctor García,25.2,4.4
-Adrián de la Fuente,46.9,8.5
-Manu Sánchez,43.6,9.8
-Axel Tape,17.0,0.3
-Ifeanyi Ndukwe,44.0,6.0
-Nacho Pérez,39.9,7.0
-Marc Santos Gavilán,30.1,0.5
-Roger Brugué,58.1,10.2
+Óscar López,27.1,0.1
+Enes Ünal,43.7,10.0
+Borja Mayoral,24.9,0.6
+Martín Satriano,52.9,10.8
+Ivan Azón,41.0,5.5
+Joselu Pérez,24.7,0.1
+Mathew Ryan,44.6,12.0
+Aïssa Mandi,44.9,9.7
+Jeremy Toljan,34.0,6.8
+Víctor García,25.0,4.4
+Adrián de la Fuente,46.7,8.5
+Manu Sánchez,43.5,9.8
+Axel Tape,17.1,0.3
+Ifeanyi Ndukwe,43.8,6.0
+Nacho Pérez,39.7,7.0
+Marc Santos Gavilán,30.0,0.5
+Roger Brugué,58.2,10.2
 Orio Rey,33.2,7.7
 Jon Ander Olasagasti,44.8,10.8
-Hugo Sotelo,28.9,1.6
-Enzo Bardeli,42.6,5.0
+Hugo Sotelo,28.8,1.6
+Enzo Bardeli,42.7,5.0
 Dani Requena,42.5,6.2
 Iván Romero,42.9,9.2
-Thiago Fernández,35.0,7.8
-Petar Ratkov,32.2,3.0
+Thiago Fernández,34.8,7.8
+Petar Ratkov,32.0,3.0
 Etta Eyong,41.8,2.5
-Paco Cortés,27.8,0.9
-Yanis Kasonga Musuayi,25.7,1.4
-Matías Dituro,42.7,12.0
-Pedro Bigas,29.2,2.3
-Víctor Chust,50.1,12.0
-Rubén Sánchez (2001),34.9,3.3
-Roy Revivo,41.0,7.8
-Buba Sangaré,40.6,8.7
-Matia Barzic,36.6,0.1
+Paco Cortés,27.7,0.9
+Yanis Kasonga Musuayi,25.5,1.4
+Matías Dituro,42.5,12.0
+Pedro Bigas,29.1,2.3
+Víctor Chust,49.8,12.0
+Rubén Sánchez (2001),34.7,3.3
+Roy Revivo,40.7,7.8
+Buba Sangaré,40.3,8.7
+Matia Barzic,36.2,0.1
 Thomas Lemar,38.9,4.6
-Josan,53.6,0.3
+Josan,53.7,0.3
 Gonzalo Villar,40.6,9.7
 Marc Aguado,37.2,4.2
-Federico Redondo,38.2,7.2
+Federico Redondo,38.1,7.2
 Facundo Buonanotte,45.3,3.9
 Martim Neto,31.7,3.5
 Javier Morcillo,34.5,8.3
-Ezequiel Ponce,28.6,1.3
-Grady Diangana,33.0,0.6
-José Antonio Morente,39.3,6.0
-Germán Valera,39.0,10.9
-Fer Niño,50.2,8.7
-Lucas Cepeda,39.8,5.8
+Ezequiel Ponce,28.5,1.3
+Grady Diangana,32.8,0.6
+José Antonio Morente,39.0,6.0
+Germán Valera,38.9,10.9
+Fer Niño,50.4,8.7
+Lucas Cepeda,39.5,5.8
 Abiel Osorio,33.9,3.8
-Ali Houary,29.7,2.6
-Álvaro Padilla Escribá,24.9,0.1
-Alfonso Herrero,36.4,12.0
-José Salinas,26.3,4.9
+Ali Houary,29.5,2.6
+Álvaro Padilla Escribá,24.7,0.1
+Alfonso Herrero,35.7,13.0
+José Salinas,27.2,5.9
 Einar Galilea,35.1,8.0
 Fernando Calero,29.3,3.7
-Juan Berrocal,35.7,1.2
-Álex Pastor,23.1,1.0
-Ángel Recio,35.6,10.0
-Carlos Puga,30.4,6.4
-Rafa Garrido,36.2,10.5
+Juan Berrocal,35.4,1.2
+Álex Pastor,28.2,1.5
+Ángel Recio,37.8,11.0
+Carlos Puga,31.9,6.9
+Diego Murillo,36.1,1.0
+Rafa Garrido,36.1,10.5
 Adam Aznou,22.1,3.3
-Juan Cruz (2000),37.0,2.7
-Pablo Martínez,51.0,5.4
+Juan Cruz (2000),36.9,2.8
+Pablo Martínez,49.4,6.3
 Jens Cajuste,31.3,0.2
-Ramón Enríquez,36.3,4.0
-Carlos Dotor,42.8,9.0
-Daniel Lorenzo,31.4,8.8
-Rafa Rodríguez,32.8,3.2
+Ramón Enríquez,35.6,4.5
+Carlos Dotor,43.1,10.0
+Daniel Lorenzo,31.6,9.1
+Rafa Rodríguez,31.8,3.7
 Izan Merino,28.5,5.4
-Joaquín Muñoz,26.9,5.3
-Eneko Jauregui,28.2,0.7
-David Larrubia,30.7,10.5
-Julen Lobete,24.8,0.1
-Haitam Abaida,31.4,0.5
-Adrián Niño,58.6,5.1
-Chupete,32.8,9.7
-Juani,24.8,0.1
+Joaquín Muñoz,26.2,6.0
+Eneko Jauregui,28.1,0.7
+David Larrubia,30.8,11.5
+Julen Lobete,24.6,0.1
+Haitam Abaida,31.2,0.5
+Adrián Niño,55.3,6.1
+Chupete,32.8,9.9
+Juani,24.6,0.1
